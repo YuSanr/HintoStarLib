@@ -1,0 +1,5 @@
+name: HiaXnLib
+version: '${version}'
+main: cn.HiaXnLib.main
+authors: [ YuSanr ]
+description: Lib

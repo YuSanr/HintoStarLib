@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.7.10'
+    id 'com.github.johnrengelman.shadow' version '2.0.4'
 }
 
 group = 'cn.hiaxn'
@@ -23,7 +24,15 @@ dependencies {
     api ('com.fasterxml.jackson.core:jackson-databind:2.9.0')
     api ('com.fasterxml.jackson.core:jackson-annotations:2.9.0')
 }
-
+shadowJar {
+    classifier = ""
+    dependencies {
+        include(dependency "com.fasterxml.jackson.core:jackson-annotations:2.9.0:withDependencies")
+        include dependency("com.fasterxml.jackson.core:jackson-core:2.9.0:withDependencies")
+        include dependency("com.fasterxml.jackson.core:jackson-databind:2.9.0:withDependencies")
+        include dependency("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10:withDependencies")
+    }
+}
 def targetJavaVersion = 8
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)

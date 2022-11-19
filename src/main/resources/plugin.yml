@@ -1,5 +1,5 @@
 name: HiaXnLib
-version: '${version}'
+version: '$version'
 main: cn.HiaXnLib.main
 authors: [ YuSanr ]
 description: Lib

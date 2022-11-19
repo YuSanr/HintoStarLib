@@ -3,7 +3,7 @@ package cn.HiaXnLib.utils;
 import java.util.List;
 import java.util.Map;
 
-public class ArrayEquals {
+public class  ArrayEquals {
 
     /**
      * 检测集合的元素是否完全相同

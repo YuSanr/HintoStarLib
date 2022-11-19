@@ -13,24 +13,24 @@ open class HiaXnGui(var uuid:String,var inventory:Inventory){
     var itemUtil = ItemStackUtils()
     companion object Register{
         var registeredGUI = HashSet<HiaXnGui>()
-        fun registerGUIs(vararg guis:HiaXnGui){
+        fun registerGUIs(vararg guis: HiaXnGui){
             registeredGUI.addAll(guis)
         }
     }
     fun openGUI(player:Player){
         player.openInventory(inventory)
     }
-    fun setItem(item:HiaXnItemStack,slot:Int):HiaXnGui{
+    fun setItem(item: HiaXnItemStack, slot:Int): HiaXnGui {
         inventory.setItem(slot,item.item)
         return this
     }
     fun register(){
         registerGUIs(this)
     }
-    fun invokeItemAction(item: HiaXnItemStack,vararg args:Any){
+    fun invokeItemAction(item: HiaXnItemStack, args:Array<Any?>){
         item.invokeAction(args)
     }
-    fun isRegisteredGUI(inventory:HiaXnGui):Boolean{
+    fun isRegisteredGUI(inventory: HiaXnGui):Boolean{
         return registeredGUI.contains(inventory)
     }
     fun setTitle(title:String){

@@ -4,50 +4,35 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '2.0.4'
 }
 
-group = 'cn.hiaxn'
-version = '1.0'
-
-
+group 'cn.HiaXnLib'
+version '1.2.1'
 repositories {
     mavenCentral()
     maven {name = 'spigotmc-repo'
-url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
-}
-maven {name = 'sonatype'
-url = 'https://oss.sonatype.org/content/groups/public/'
-} }
-
-dependencies {
-    implementation fileTree(dir: "./lib",includes: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    api ('com.fasterxml.jackson.core:jackson-core:2.9.0')
-    api ('com.fasterxml.jackson.core:jackson-databind:2.9.0')
-    api ('com.fasterxml.jackson.core:jackson-annotations:2.9.0')
-}
-shadowJar {
-    classifier = ""
-    dependencies {
-        include(dependency "com.fasterxml.jackson.core:jackson-annotations:2.9.0:withDependencies")
-        include dependency("com.fasterxml.jackson.core:jackson-core:2.9.0:withDependencies")
-        include dependency("com.fasterxml.jackson.core:jackson-databind:2.9.0:withDependencies")
-        include dependency("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10:withDependencies")
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
     }
+    maven {name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+}
+dependencies {
+    compileOnly fileTree(dir: "./lib",includes: ["*.jar"])
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.0'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.0'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.0'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.7.10'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10"
+    implementation "org.jetbrains.kotlin:kotlin-test:1.7.10"
 }
 def targetJavaVersion = 8
-java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
-}
-
 tasks.withType(JavaCompile).configureEach {
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
         options.release = targetJavaVersion
     }
     options.encoding = "UTF-8"
+}
+shadowJar{
+    classifier = 'plugin'
 }
 
 processResources {
@@ -67,4 +52,7 @@ compileTestKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+}
+tasks.build{
+//    classifier = 'sb'
 }

@@ -6,13 +6,15 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.EntityType
 
 class EntityUtil {
-    fun createEntity(world: World,location: Location,type:EntityType):Entity{
-        return world.spawnEntity(location,type)
+    fun createEntity(location: Location,type:EntityType):Entity{
+        return location.world.spawnEntity(location,type)
     }
-    fun createEntity(world: World,location: Location,entity: Entity):Entity{
-        if (entity.isValid){
-
+    fun removeEntity(entity: Entity){
+        if(entity.isValid){
+            entity.remove()
         }
-        return entity
+    }
+    fun setEntityCustomName(name:String,entity: Entity){
+        entity.customName = name
     }
 }

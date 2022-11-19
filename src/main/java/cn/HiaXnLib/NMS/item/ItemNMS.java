@@ -7,6 +7,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
+/**
+ * 运用反射的方式
+ * 理论支持1.8-1.12.2
+ */
 public class ItemNMS {
     /**
      * 将NMS的物品堆转换为BukkitAPI的物品堆
@@ -293,7 +297,8 @@ public class ItemNMS {
      * @param key NBT的索引
      * @return 获取的物品 key不存在时 返回Null
      */
-    public Object getNbtBase(ItemStack item,String key) throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    public Object getNbtBase(ItemStack item,String key)
+            throws ClassNotFoundException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         // 在获取NBT之前首先要判断物品是否有这个NBT选项
         if (hasNBT(item,key)){
             // 导包方法

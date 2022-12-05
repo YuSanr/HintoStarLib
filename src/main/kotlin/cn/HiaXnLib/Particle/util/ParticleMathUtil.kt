@@ -84,64 +84,108 @@ object ParticleMathUtil {
         }
         return list
     }
-
-    /*
-     * 以下代码来自PlayerParticle
-     */
     /**
-     * Rotates a vector around the X axis at an angle
-     *
-     * @param v Starting vector
-     * @param angle How much to rotate
-     * @return The starting vector rotated
+     * 旋转一个点
+     * 把这个点按照2个角度旋转 某个弧度
+     * 进行旋转时 通过一个点(对称轴上的点) 获取实际角度
+     * 具体获取方式看
+     * @see toPointYaw 取2点水平角差
+     * @see toPointPitch 取2点垂直差
+     * @param yaw 水平旋转角 弧度
+     * @param pitch 垂直旋转角
      */
-    fun rotateAroundAxisX(v: Vector, angle: Double): Vector? {
-        val y: Double
-        val z: Double
-        val cos: Double
-        val sin: Double
-        cos = Math.cos(angle)
-        sin = Math.sin(angle)
-        y = v.y * cos - v.z * sin
-        z = v.y * sin + v.z * cos
-        return v.setY(y).setZ(z)
+    fun rotationPoint(locList: List<RelativeLocation>, yaw:Double, pitch:Double):List<RelativeLocation>{
+        /**
+         * 原始XY圆
+         * x = cos a *r
+         * y = sin a *r
+         * 套用XZ圆
+         * x = cos b *r
+         * y = 0
+         * z = sin b *r
+         * b 为水平角
+         * a 为垂直角
+         * 此时 在XY圆上 点距离Y轴的长度为 x 既 cos a *r
+         * 因此
+         * 得出下列式子
+         * r = loc.length()
+         * x = cos b * cos a * loc.length()
+         * y = sin a * loc.length()
+         * z = sin b * cos a * loc.length()
+         */
+        for (loc in locList) {
+            val yawAdded = yaw + getYawFromLocation(loc)
+            val pitchAdded = pitch + getPitchRad(loc)
+            val r = loc.length()
+            val x = cos(yawAdded) * cos(pitchAdded) * r
+            val y = sin(pitchAdded) * r
+            val z = sin(yawAdded) * cos(pitchAdded) * r
+            loc.x = x
+            loc.y = y
+            loc.z = z
+        }
+        return locList
     }
 
     /**
-     * Rotates a vector around the Y axis at an angle
-     *
-     * @param v Starting vector
-     * @param angle How much to rotate
-     * @return The starting vector rotated
+     * 获取到2个点的垂直角的偏差
+     * @param loc 起点
+     * @param toLoc 终点
+     * 起点的垂直角 + 该函数的结果 = 终点的垂直角
      */
-    fun rotateAroundAxisY(v: Vector, angle: Double): Vector? {
-        val x: Double
-        val z: Double
-        val cos: Double
-        val sin: Double
-        cos = Math.cos(angle)
-        sin = Math.sin(angle)
-        x = v.x * cos + v.z * sin
-        z = v.x * -sin + v.z * cos
-        return v.setX(x).setZ(z)
+    fun toPointPitch(loc: RelativeLocation, toLoc:RelativeLocation):Double{
+        return getPitchRad(toLoc) - getPitchRad(loc)
+    }
+    /**
+     * 获取到2个点的水平角的偏差
+     * @param loc 起点
+     * @param toLoc 终点
+     * 起点的水平角 + 该函数的结果 = 终点的水平角
+     */
+    fun toPointYaw(loc:RelativeLocation, toLoc:RelativeLocation):Double{
+        return getYawFromLocation(toLoc) - getYawFromLocation(loc)
     }
 
-    /**
-     * Rotates a vector around the Z axis at an angle
-     *
-     * @param v Starting vector
-     * @param angle How much to rotate
-     * @return The starting vector rotated
-     */
-    fun rotateAroundAxisZ(v: Vector, angle: Double): Vector? {
-        val x: Double
-        val y: Double
-        val cos: Double
-        val sin: Double
-        cos = Math.cos(angle)
-        sin = Math.sin(angle)
-        x = v.x * cos - v.y * sin
-        y = v.x * sin + v.y * cos
-        return v.setX(x).setY(y)
+    fun getYawFromLocation(loc:RelativeLocation):Double{
+        var x = loc.x
+        var z = loc.z
+        if (x in -0.000000001 .. 0.000000001){
+            x = 0.0
+        }
+        if (z in -0.000000001 .. 0.000000001){
+            z = 0.0
+        }
+        return atan2(z,x)
+    }
+
+    fun getPitchRad(loc:RelativeLocation):Double{
+        val sp = getYawFromLocation(loc)
+        if (loc.y == 0.0 && loc.x == 0.0 && loc.z == 0.0) return 0.0
+        val sq = sqrt(loc.x.pow(2)+loc.z.pow(2))
+        return if(sp in 0.0 .. PI /2){
+            if(loc.x>=0 && loc.z>=0){
+                atan2(loc.y,sq)
+            }else{
+                atan2(loc.y,-sq)
+            }
+        }else if(sp in PI /2 .. PI){
+            if(loc.x<=0 && loc.z>=0){
+                atan2(loc.y,sq)
+            }else{
+                atan2(loc.y,-sq)
+            }
+        }else if(sp in -PI .. -PI /2){
+            if(loc.x<=0 && loc.z<=0){
+                atan2(loc.y,sq)
+            }else{
+                atan2(loc.y,-sq)
+            }
+        }else {
+            if(loc.x<=0 && loc.z<=0){
+                atan2(loc.y,sq)
+            }else{
+                atan2(loc.y,-sq)
+            }
+        }
     }
 }

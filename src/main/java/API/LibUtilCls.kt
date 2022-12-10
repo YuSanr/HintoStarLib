@@ -1,4 +1,4 @@
-package cn.HiaXnLib.API
+package API
 
 import cn.HiaXnLib.NMS.item.ItemNMS
 import com.fasterxml.jackson.databind.ObjectMapper

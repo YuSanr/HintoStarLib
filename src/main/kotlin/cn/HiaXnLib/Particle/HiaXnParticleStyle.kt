@@ -3,14 +3,14 @@ package cn.HiaXnLib.Particle
 import org.bukkit.Location
 import java.util.LinkedList
 
-abstract class HiaXnParticleStyle(){
+abstract class HiaXnParticleStyle{
 
     /**
      * 上一个点与下一个点之间的间隔
      * 单位 tick
      * @see setIntervalTime
      */
-    private var  intervalTick:Int = -1
+    private var  intervalTick:Int = 1
     /**
      * @param location 原点 所有styleMap的轨迹的相对位置的原点
      * 一般为Minecraft的世界坐标原点

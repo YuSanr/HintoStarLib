@@ -1,13 +1,13 @@
 package cn.HiaXnLib.Lib.v1_8_R3.util
 
-import cn.HiaXnLib.API.util.PlayerUtil
+import API.util.PlayerUtil
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer
 import org.bukkit.craftbukkit.v1_8_R3.util.CraftChatMessage
 import org.bukkit.entity.Player
 
-class LibPlayerUtil:PlayerUtil {
+class LibPlayerUtil: PlayerUtil {
     override fun sendTitle(player: Player, title: String, subTitle: String, fadeIn: Int, stay: Int, fadeOut: Int) {
         val craftPlayer = player as CraftPlayer
         var packetSubtitle: PacketPlayOutTitle

@@ -3,3 +3,6 @@ version: '$version'
 main: cn.HiaXnLib.main
 authors: [ YuSanr ]
 description: Lib
+
+commands:
+  testlib:

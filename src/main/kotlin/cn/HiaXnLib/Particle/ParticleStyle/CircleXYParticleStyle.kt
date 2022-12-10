@@ -1,9 +1,7 @@
 package cn.HiaXnLib.Particle.ParticleStyle
 
-import cn.HiaXnLib.Particle.HiaXnParticle
 import cn.HiaXnLib.Particle.HiaXnParticleGroup
 import cn.HiaXnLib.Particle.HiaXnParticleStyle
-import cn.HiaXnLib.Particle.HiaXnParticles.PointParticleGroup
 import cn.HiaXnLib.Particle.util.ParticleMathUtil
 import org.bukkit.Location
 import java.util.*
@@ -12,7 +10,7 @@ import java.util.*
 /**
  * @param order 为true时 顺时针旋转 为false时 逆时针旋转
  */
-class CircleXYParticleStyle(var playTimes:Int, val radius:Double, var particle:HiaXnParticle, var order:Boolean): HiaXnParticleStyle() {
+class CircleXYParticleStyle(var playTimes:Int, val radius:Double, var particleGroup:HiaXnParticleGroup, var order:Boolean): HiaXnParticleStyle() {
     var index = 0
     var nowTimes = 0
     init {
@@ -21,10 +19,10 @@ class CircleXYParticleStyle(var playTimes:Int, val radius:Double, var particle:H
     override fun getParticleList(location: Location): LinkedList<HiaXnParticleGroup> {
         val result = LinkedList<HiaXnParticleGroup>()
         if (order){
-            result.add(PointParticleGroup(ParticleMathUtil.getXYCircleLocation(location,radius,radius.toInt()*90)[index],particle))
+            result.add(particleGroup.clone(ParticleMathUtil.getXYCircleLocation(location,radius,radius.toInt()*90)[index]))
         }else{
             val list = ParticleMathUtil.getXYCircleLocation(location, radius, radius.toInt() * 90)
-            result.add(PointParticleGroup(list[list.size - index - 1],particle))
+            result.add(particleGroup.clone(list[list.size - index - 1]))
         }
         return result
     }

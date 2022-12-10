@@ -1,7 +1,6 @@
 package cn.HiaXnLib.Particle.util
 
 import cn.HiaXnLib.Particle.HiaXnParticlePair
-import cn.HiaXnLib.Particle.HiaXnParticleStyle
 import org.bukkit.Bukkit
 import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitRunnable
@@ -48,7 +47,7 @@ class ParticleTask(private val plugin:Plugin):BukkitRunnable() {
 
     private class ShowParticlePair(val task:BukkitTask,val pair: HiaXnParticlePair){
     }
-    fun containsPair(pair:HiaXnParticlePair,uuid: UUID):Boolean{
+    fun containsPair(pair:HiaXnParticlePair, uuid: UUID):Boolean{
         var showParticlePairs = runningTaskMap[uuid]?:return false
         for (i in showParticlePairs.indices){
             if (showParticlePairs[i].pair == pair){

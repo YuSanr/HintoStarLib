@@ -1,4 +1,4 @@
-package API.util
+package cn.HiaXnLib.API.util
 
 import org.bukkit.entity.Player
 

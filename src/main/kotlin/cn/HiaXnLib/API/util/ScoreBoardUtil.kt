@@ -1,4 +1,4 @@
-package API.util
+package cn.HiaXnLib.API.util
 
 interface ScoreBoardUtil {
 

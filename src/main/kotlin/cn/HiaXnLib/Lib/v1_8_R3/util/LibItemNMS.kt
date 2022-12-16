@@ -1,6 +1,6 @@
 package cn.HiaXnLib.Lib.v1_8_R3.util
 
-import API.util.ItemNMS
+import cn.HiaXnLib.API.util.ItemNMS
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack
 import org.bukkit.inventory.ItemStack
 

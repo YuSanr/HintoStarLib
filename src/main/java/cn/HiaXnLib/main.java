@@ -1,7 +1,8 @@
 package cn.HiaXnLib;
 
-import API.LibUtil;
-import API.LibUtilCls;
+import cn.HiaXnLib.API.LibUtil;
+import cn.HiaXnLib.API.LibUtilCls;
+import cn.HiaXnLib.Listener.BarrageListener;
 import cn.HiaXnLib.Particle.ParticleOwner.Barrages.util.BarrageTask;
 import cn.HiaXnLib.Particle.util.ParticleTask;
 import cn.HiaXnLib.command.testCommand;
@@ -20,6 +21,7 @@ public final class main extends JavaPlugin {
         new BarrageTask().runTaskTimer(this,10,1);
         Bukkit.getServicesManager().register(LibUtil.class,new LibUtilCls(),this, ServicePriority.High);
         Bukkit.getPluginCommand("testlib").setExecutor(new testCommand());
+        Bukkit.getPluginManager().registerEvents(new BarrageListener(),this);
     }
     public static Plugin getInstance() {
         return main.getPlugin(main.class);

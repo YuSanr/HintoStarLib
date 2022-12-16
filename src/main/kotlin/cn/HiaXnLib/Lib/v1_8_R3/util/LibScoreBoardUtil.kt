@@ -1,6 +1,6 @@
 package cn.HiaXnLib.Lib.v1_8_R3.util
 
-import API.util.ScoreBoardUtil
+import cn.HiaXnLib.API.util.ScoreBoardUtil
 
 class LibScoreBoardUtil: ScoreBoardUtil {
 

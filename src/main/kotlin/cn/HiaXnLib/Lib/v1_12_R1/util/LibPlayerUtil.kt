@@ -1,6 +1,6 @@
 package cn.HiaXnLib.Lib.v1_12_R1.util
 
-import API.util.PlayerUtil
+import cn.HiaXnLib.API.util.PlayerUtil
 import net.md_5.bungee.api.chat.TextComponent
 import net.minecraft.server.v1_12_R1.PacketPlayOutTitle
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer

@@ -14,16 +14,19 @@ class BarrageTask: BukkitRunnable() {
         val runningBarrageTaskMap = HashMap<UUID,ArrayList<RunningBarrageTask>>()
     }
     override fun run() {
-        for (barrage in activeBarrageSet) {
+        val activeBarrageIterator = activeBarrageSet.iterator()
+        // 针对40%的检测性能损耗的优化
+        while (activeBarrageIterator.hasNext()){
+            val barrage = activeBarrageIterator.next()
             if (!runningBarrageTaskMap.containsKey(barrage.barrageOwner.getUUID())){
                 runningBarrageTaskMap[barrage.barrageOwner.getUUID()] = ArrayList<RunningBarrageTask>()
             }
             val subList = runningBarrageTaskMap[barrage.barrageOwner.getOwner().getUUID()]?:continue
-            if (!containsPair(barrage,barrage.barrageOwner.getUUID())){
-                subList.add(
-                    RunningBarrageTask(BarrageRunnable(barrage).runTaskTimerAsynchronously(main.getInstance(),5,1),barrage)
-                )
-            }
+            subList.add(
+                RunningBarrageTask(BarrageRunnable(barrage).runTaskTimerAsynchronously(main.getInstance(),5,1),barrage)
+            )
+            // 用完就删
+            activeBarrageIterator.remove()
         }
         val iterator = runningBarrageTaskMap.iterator()
         while (iterator.hasNext()){
@@ -32,7 +35,7 @@ class BarrageTask: BukkitRunnable() {
             while (subListIterator.hasNext()){
                 val subNext = subListIterator.next()
                 if(subNext.barrage.hitted){
-                    activeBarrageSet.remove(subNext.barrage)
+                    Barrage.barrageHashMap.remove(subNext.barrage.barrageUUID)
                     subNext.task.cancel()
                     subListIterator.remove()
                 }
@@ -57,14 +60,5 @@ class BarrageTask: BukkitRunnable() {
                 cancel()
             }
         }
-    }
-    fun containsPair(barrage:Barrage, uuid: UUID):Boolean{
-        var runningBarrageTasks = runningBarrageTaskMap[uuid]?:return false
-        for (i in runningBarrageTasks.indices){
-            if (runningBarrageTasks[i].barrage == barrage){
-                return true
-            }
-        }
-        return false
     }
 }

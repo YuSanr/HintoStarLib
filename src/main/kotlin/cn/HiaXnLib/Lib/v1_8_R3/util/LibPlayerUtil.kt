@@ -1,6 +1,6 @@
 package cn.HiaXnLib.Lib.v1_8_R3.util
 
-import API.util.PlayerUtil
+import cn.HiaXnLib.API.util.PlayerUtil
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer

@@ -4,6 +4,7 @@ import cn.HiaXnLib.Event.BarrageHitEvent
 import cn.HiaXnLib.Particle.HiaXnParticle
 import cn.HiaXnLib.Particle.HiaXnParticleGroup
 import cn.HiaXnLib.Particle.HiaXnParticles.PointParticleGroup
+import cn.HiaXnLib.Particle.ParticleOwner.Barrages.util.BarrageUtil
 import cn.HiaXnLib.Particle.ParticleOwner.Owner
 import cn.HiaXnLib.Particle.ParticleOwner.ParticleEntity
 import cn.HiaXnLib.Particle.ParticleOwner.ParticlePlayer
@@ -15,7 +16,7 @@ import org.bukkit.Location
 import org.bukkit.Particle
 import org.bukkit.entity.Player
 import org.bukkit.util.Vector
-import java.util.HashMap
+import java.lang.IllegalStateException
 import java.util.LinkedList
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
@@ -23,20 +24,24 @@ import kotlin.math.min
 
 /**
  * @param barrageOwner 弹幕所有者
+ * @param particleGroup 绑定粒子组  用于显示弹幕
  */
-abstract class Barrage(var location:Location,val barrageUUID:UUID,var barrageOwner:Owner) :Owner{
+abstract class Barrage(var startLocation:Location, val barrageUUID:UUID, var barrageOwner:Owner, var particleGroup: HiaXnParticleGroup= PointParticleGroup(startLocation, HiaXnParticle(
+    HiaXnParticle.ParticleConfig(
+        Particle.CLOUD,0.0,1,0.0,0.0,0.0))), var maxRange:Double = 128.0) :Owner{
     companion object{
         val barrageHashMap = ConcurrentHashMap<UUID,Barrage>()
     }
+    /**
+     * 可以被击中的点
+     */
+    private var hitLocationList = ArrayList<Location>()
+    private var backpackHitLocationList = ArrayList<Location>()
     // 是否存活
     var effective = true
     var hitted = false
     // 当前位置
-    var nowLocation:Location = location
-    // 绑定粒子组  用于显示弹幕
-    var particleGroup:HiaXnParticleGroup = PointParticleGroup(nowLocation, HiaXnParticle(
-        HiaXnParticle.ParticleConfig(
-            Particle.CLOUD,0.0,1,0.0,0.0,0.0)))
+    var nowLocation:Location = startLocation.clone()
     // 击中策略判断
     private var hitStrategy:(Owner)->Boolean = {false}
     // 击中行为策略列表
@@ -48,6 +53,11 @@ abstract class Barrage(var location:Location,val barrageUUID:UUID,var barrageOwn
     // 当前速度
     var speedVector = Vector(0.0,0.0,0.0)
     var nowSpeed = 0.0
+    init {
+        hitLocationList.add(nowLocation)
+        backpackHitLocationList.add(nowLocation)
+    }
+
     /**
      * 击中判断策略
      */
@@ -95,6 +105,7 @@ abstract class Barrage(var location:Location,val barrageUUID:UUID,var barrageOwn
     /**
      * 更新当前粒子所在的位置
      * 并且显示粒子
+     * 可以重写
      */
     fun updateAndShowParticle(){
         val speedDirector = RelativeLocation(speedVector.x,speedVector.y,speedVector.z)
@@ -132,7 +143,7 @@ abstract class Barrage(var location:Location,val barrageUUID:UUID,var barrageOwn
                 return
             }
         }
-        for (player in nowLocation.world.players) {
+        for (player in this.nowLocation.world.players){
             // 不 能 打 自 己
             if (barrageOwner.getUUID() == player.uniqueId) continue
             val particlePlayer = ParticlePlayer(player)
@@ -143,19 +154,33 @@ abstract class Barrage(var location:Location,val barrageUUID:UUID,var barrageOwn
             }
         }
         // 万一打到了其他实体
-        for (entity in nowLocation.world.entities){
-            // 玩家也是实体
-            if (entity is Player) continue
-            val particleEntity = ParticleEntity(entity)
-            if (hitStrategy(particleEntity)){
-                hitDoingStrategy(particleEntity)
-                Bukkit.getPluginManager().callEvent(BarrageHitEvent(this,particleEntity))
-                return
+        // 针对实体距离检测 在实体过多时导致的性能占用过大的问题的优化
+        try{
+            for (entity in this.nowLocation.world.entities){
+                // 玩家也是实体
+                if (entity is Player)  continue
+                entity?:continue
+                val particleEntity = ParticleEntity(entity)
+                if (hitStrategy(particleEntity)){
+                    hitDoingStrategy(particleEntity)
+                    Bukkit.getPluginManager().callEvent(BarrageHitEvent(this,particleEntity))
+                    return
+                }
             }
+        }catch (ignored:Exception){
+            // 可能超出区块加载范围导致大量报错
+            // 输出报错的时候导致服务器卡死
+            // 因此在超出区块的时候直接判定击中
+            // 此判定强制存在 是影响稳定性的
         }
         // 万一打到方块了呢
         val particleLocation = ParticlePoint(this.nowLocation,UUID.randomUUID())
         if (hitStrategy(particleLocation)){
+            hitDoingStrategy(particleLocation)
+            Bukkit.getPluginManager().callEvent(BarrageHitEvent(this,particleLocation))
+            return
+        }
+        if(this.maxRange <= nowLocation.distance(startLocation)){
             hitDoingStrategy(particleLocation)
             Bukkit.getPluginManager().callEvent(BarrageHitEvent(this,particleLocation))
             return
@@ -174,14 +199,60 @@ abstract class Barrage(var location:Location,val barrageUUID:UUID,var barrageOwn
     }
 
     /**
+     * 旋转位置 绕着origin水平 垂直 旋转n度
+     */
+    protected fun rotationLocationAsAxis(list:ArrayList<Location>,origin:Location,yaw:Double,pitch:Double){
+        val relativeList = LinkedList<RelativeLocation>()
+        for (loc in list){
+            // to RelativeLocation
+            val relativeLocation = RelativeLocation(loc.x - origin.x,loc.y - origin.y,loc.z - origin.z)
+            relativeList.add(relativeLocation)
+        }
+        // rotationList
+        ParticleMathUtil.rotationPoint(relativeList,yaw,pitch)
+        // set location
+        for (i in 0 until list.size){
+            val loc = list[i]
+            val relativeLoc = relativeList[i]
+            loc.x += relativeLoc.x
+            loc.y += relativeLoc.y
+            loc.z += relativeLoc.z
+        }
+    }
+    // 实际上这个Location是不断更新的
+    // 因此不能这么写 草
+    protected fun addHitLocation(relativeLocation: RelativeLocation){
+
+    }
+    /**
      * 进行到下一个位置
      * 相当于向运动方向运动了1tick
      */
     protected fun nextLocation(){
         val multiply = speedVector.clone().multiply(nowSpeed / 20.0)
-        nowLocation.x += multiply.x
-        nowLocation.y+= multiply.y
-        nowLocation.z += multiply.z
+        this.nowLocation.x += multiply.x
+        this.nowLocation.y+= multiply.y
+        this.nowLocation.z += multiply.z
+    }
+
+    /**
+     * 检测目标是否在点内
+     * @param owner 被检测的目标
+     * @param range 实体距离点的距离 default value is 1.0
+     * @return 是否在点内 如果在点内 返回True (一般的认为这个已经是击中目标了)
+     * @see hitLocationList [hitLocationList.add(添加可以被判定的点)]
+     */
+    protected fun entityInBarrageRange(owner:Owner,range:Double = 1.0):Boolean{
+        if (owner !is ParticlePoint){
+            for (loc in hitLocationList) {
+                val ownerLocation = owner.getParticleLocation()
+                if (ownerLocation.distance(loc) <= range){
+                    return true
+                }
+            }
+            return false
+        }
+        return false
     }
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -189,7 +260,7 @@ abstract class Barrage(var location:Location,val barrageUUID:UUID,var barrageOwn
 
         other as Barrage
 
-        if (location != other.location) return false
+        if (startLocation != other.startLocation) return false
         if (barrageUUID != other.barrageUUID) return false
         if (barrageOwner != other.barrageOwner) return false
         if (effective != other.effective) return false
@@ -206,7 +277,7 @@ abstract class Barrage(var location:Location,val barrageUUID:UUID,var barrageOwn
     }
 
     override fun hashCode(): Int {
-        var result = location.hashCode()
+        var result = startLocation.hashCode()
         result = 31 * result + barrageUUID.hashCode()
         result = 31 * result + barrageOwner.hashCode()
         result = 31 * result + effective.hashCode()

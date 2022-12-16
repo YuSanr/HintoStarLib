@@ -16,8 +16,8 @@ class SwordParticleGroup(origin:Location?,var particle: HiaXnParticle):HiaXnPart
         if(bufferedLocationMap.isEmpty()){
             val startLocation = RelativeLocation(0.0,0.0,0.0)
             val endAxisLocation = axis.clone()
-            val swordStartLocation = RelativeLocation(1.0,0.0,1.0)
-            val swordEndLocation = RelativeLocation(1.0,0.0,-1.0)
+            val swordStartLocation = RelativeLocation(1.0,0.0,0.25)
+            val swordEndLocation = RelativeLocation(1.0,0.0,-0.25)
             val result = LinkedHashMap<RelativeLocation,HiaXnParticle>()
             val axisList = ParticleMathUtil.getLineLocation(startLocation,endAxisLocation,20)
             val swordList = ParticleMathUtil.getLineLocation(swordStartLocation,swordEndLocation,20)

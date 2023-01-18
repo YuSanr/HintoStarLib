@@ -37,7 +37,7 @@ public class StringUtil {
                 boolean allChar = true;
                 // 检测是否都为 大小写字母 和 数字
                 for (char aChar : chars) {
-                    if (!charJudge.isBaseChar(aChar)) {
+                    if (!StringUtil.isBaseChar(aChar)) {
                         allChar = false;
                         break;
                     }

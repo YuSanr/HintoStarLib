@@ -6,10 +6,7 @@ class LibUtilCls : LibUtil {
     override fun getItemUtil(): ItemStackUtils {
         return ItemStackUtils()
     }
-    @Deprecated("过时的 请使用getItemUtil", ReplaceWith("getItemUtil()", "item.utils.ItemStackUtils"))
-    override fun getItemNMS(): ItemNMS {
-        return ItemNMS()
-    }
+
     override fun getObjectMapper(): ObjectMapper {
         return ObjectMapper()
     }

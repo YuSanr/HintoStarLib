@@ -1,8 +1,7 @@
 package cn.HiaXnLib.NMS.item;
 
 import cn.HiaXnLib.myException.itemNotEnoughException;
-import cn.HiaXnLib.utils.ArrayEquals;
-import cn.HiaXnLib.utils.getCodePath;
+import cn.HiaXnLib.utils.ArrayUtil;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -10,7 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.List;
 import java.util.Map;
 
-public class itemUtil extends ItemNMS {
+public class itemUtil{
 
     /**
      * 在玩家的背包容器内移除物品
@@ -158,19 +157,19 @@ public class itemUtil extends ItemNMS {
                         return itemMeta.getDisplayName().equals(itemMeta1.getDisplayName());
                     }else if(itemMeta.getLore() ==null || itemMeta1.getLore() == null){
                         return false;
-                    }else return ArrayEquals.listEquals(itemMeta.getLore(), itemMeta1.getLore());
+                    }else return ArrayUtil.listEquals(itemMeta.getLore(), itemMeta1.getLore());
                 }else if (item1.getEnchantments().isEmpty() || item2.getEnchantments().isEmpty()){
                     return false;
                 }else {
                     // 拥有附魔
                     Map<Enchantment, Integer> en1 = item1.getEnchantments();
                     Map<Enchantment, Integer> en2 = item2.getEnchantments();
-                    if (ArrayEquals.mapEquals(en1,en2)){
+                    if (ArrayUtil.mapEquals(en1,en2)){
                         if (itemMeta.getLore() == null && itemMeta1.getLore() == null){
                             return itemMeta.getDisplayName().equals(itemMeta1.getDisplayName());
                         }else if(itemMeta.getLore() ==null || itemMeta1.getLore() == null){
                             return false;
-                        }else if(ArrayEquals.listEquals(itemMeta.getLore(),itemMeta1.getLore())){
+                        }else if(ArrayUtil.listEquals(itemMeta.getLore(),itemMeta1.getLore())){
                             return true;
                         }else {
                             return false;

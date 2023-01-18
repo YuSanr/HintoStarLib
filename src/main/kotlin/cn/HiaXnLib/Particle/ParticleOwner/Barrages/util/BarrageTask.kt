@@ -23,7 +23,7 @@ class BarrageTask: BukkitRunnable() {
             }
             val subList = runningBarrageTaskMap[barrage.barrageOwner.getOwner().getUUID()]?:continue
             subList.add(
-                RunningBarrageTask(BarrageRunnable(barrage).runTaskTimerAsynchronously(main.getInstance(),5,1),barrage)
+                RunningBarrageTask(BarrageRunnable(barrage).runTaskTimer(main.getInstance(),5,1),barrage)
             )
             // 用完就删
             activeBarrageIterator.remove()

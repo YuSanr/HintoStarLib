@@ -9,6 +9,6 @@ public class PlaceHolderAPIUtil {
         expansion.register();
     }
     public static String getPlaceHolderStr(OfflinePlayer player,String message){
-        return PlaceholderAPI.setPlaceholders(player,setColor.setColor(message));
+        return PlaceholderAPI.setPlaceholders(player, StringUtil.setColor(message));
     }
 }

@@ -13,6 +13,7 @@ import java.util.*
 
 class SwordParticleStyle(var target:Owner,particle:HiaXnParticle): HiaXnParticleStyle() {
     val group = SwordParticleGroup(null,particle)
+    var time=0
     override fun getParticleList(location: Location): LinkedList<HiaXnParticleGroup> {
         val list = LinkedList<HiaXnParticleGroup>()
         val keyList = LinkedList<RelativeLocation>()
@@ -35,10 +36,11 @@ class SwordParticleStyle(var target:Owner,particle:HiaXnParticle): HiaXnParticle
         }
         return list
     }
-
     override fun updateParticleLocation() {
-
+        time++
     }
 
-    override fun cancelStrategy(): Boolean  = false
+    override fun cancelStrategy(): Boolean {
+        return time>100
+    }
 }

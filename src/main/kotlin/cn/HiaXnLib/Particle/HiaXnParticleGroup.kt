@@ -38,6 +38,37 @@ abstract class HiaXnParticleGroup(var origin: Location?){
             ParticleUtil.spawnParticle(nextLocation,entry.value)
         }
     }
+
+    /**
+     * 由于多版本的逆天特性
+     * 因此在这里加入自定义的粒子生成方式
+     */
+    fun display(map:LinkedHashMap<RelativeLocation,HiaXnParticle>,spawnMethod:(location:Location,particle:HiaXnParticle)->Unit){
+        origin?:return
+        for (entry in map) {
+            val relativeLocation = entry.key
+            val nextLocation = origin!!.clone()
+            nextLocation.x += relativeLocation.x
+            nextLocation.y += relativeLocation.y
+            nextLocation.z += relativeLocation.z
+            spawnMethod(nextLocation,entry.value)
+        }
+    }
+    /**
+     * 由于多版本的逆天特性
+     * 因此在这里加入自定义的粒子生成方式
+     */
+    fun display(spawnMethod:(location:Location,particle:HiaXnParticle)->Unit){
+        origin?:return
+        for (entry in getParticleLocationMap()) {
+            val relativeLocation = entry.key
+            val nextLocation = origin!!.clone()
+            nextLocation.x += relativeLocation.x
+            nextLocation.y += relativeLocation.y
+            nextLocation.z += relativeLocation.z
+            spawnMethod(nextLocation,entry.value)
+        }
+    }
     abstract fun clone():HiaXnParticleGroup
     abstract fun clone(location:Location):HiaXnParticleGroup
 }

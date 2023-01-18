@@ -4,19 +4,18 @@ import cn.HiaXnLib.Event.BarrageHitEvent
 import cn.HiaXnLib.Particle.HiaXnParticle
 import cn.HiaXnLib.Particle.HiaXnParticleGroup
 import cn.HiaXnLib.Particle.HiaXnParticles.PointParticleGroup
-import cn.HiaXnLib.Particle.ParticleOwner.Barrages.util.BarrageUtil
 import cn.HiaXnLib.Particle.ParticleOwner.Owner
 import cn.HiaXnLib.Particle.ParticleOwner.ParticleEntity
 import cn.HiaXnLib.Particle.ParticleOwner.ParticlePlayer
 import cn.HiaXnLib.Particle.ParticleOwner.ParticlePoint
 import cn.HiaXnLib.Particle.RelativeLocation
 import cn.HiaXnLib.Particle.util.ParticleMathUtil
+import cn.HiaXnLib.main
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Particle
 import org.bukkit.entity.Player
 import org.bukkit.util.Vector
-import java.lang.IllegalStateException
 import java.util.LinkedList
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
@@ -101,33 +100,12 @@ abstract class Barrage(var startLocation:Location, val barrageUUID:UUID, var bar
      * 包括最基本的移动
      */
     abstract fun updateLocation()
-    // 根据SpeedVector更改particle的指向
     /**
      * 更新当前粒子所在的位置
      * 并且显示粒子
      * 可以重写
      */
-    fun updateAndShowParticle(){
-        val speedDirector = RelativeLocation(speedVector.x,speedVector.y,speedVector.z)
-        val pitch = ParticleMathUtil.toPointPitch(particleGroup.axis,speedDirector)
-        val yaw = ParticleMathUtil.toPointYaw(particleGroup.axis,speedDirector)
-        val mapList = particleGroup.getParticleLocationMap()
-        val relativeList = LinkedList<RelativeLocation>()
-        for (entry in mapList){
-            relativeList.add(entry.key)
-        }
-        ParticleMathUtil.rotationPoint(relativeList,yaw,pitch)
-        val newMap = LinkedHashMap<RelativeLocation,HiaXnParticle>()
-        val keyList = LinkedList<HiaXnParticle>()
-        for (key in mapList.values) {
-            keyList.add(key)
-        }
-        for (i  in 0 until keyList.size){
-            newMap[relativeList[i]] = keyList[i]
-        }
-        // 播放
-        particleGroup.display(newMap)
-    }
+    abstract fun updateAndShowParticle()
     /**
      * 检测弹幕是否符合击中条件
      * 符合 则执行击中函数
@@ -139,7 +117,6 @@ abstract class Barrage(var startLocation:Location, val barrageUUID:UUID, var bar
             }
             if (hitStrategy(barrages.value)){
                 hitDoingStrategy(barrages.value)
-                Bukkit.getPluginManager().callEvent(BarrageHitEvent(this,barrages.value))
                 return
             }
         }
@@ -149,7 +126,6 @@ abstract class Barrage(var startLocation:Location, val barrageUUID:UUID, var bar
             val particlePlayer = ParticlePlayer(player)
             if (hitStrategy(particlePlayer)){
                 hitDoingStrategy(particlePlayer)
-                Bukkit.getPluginManager().callEvent(BarrageHitEvent(this,particlePlayer))
                 return
             }
         }
@@ -163,7 +139,6 @@ abstract class Barrage(var startLocation:Location, val barrageUUID:UUID, var bar
                 val particleEntity = ParticleEntity(entity)
                 if (hitStrategy(particleEntity)){
                     hitDoingStrategy(particleEntity)
-                    Bukkit.getPluginManager().callEvent(BarrageHitEvent(this,particleEntity))
                     return
                 }
             }
@@ -177,12 +152,10 @@ abstract class Barrage(var startLocation:Location, val barrageUUID:UUID, var bar
         val particleLocation = ParticlePoint(this.nowLocation,UUID.randomUUID())
         if (hitStrategy(particleLocation)){
             hitDoingStrategy(particleLocation)
-            Bukkit.getPluginManager().callEvent(BarrageHitEvent(this,particleLocation))
             return
         }
         if(this.maxRange <= nowLocation.distance(startLocation)){
             hitDoingStrategy(particleLocation)
-            Bukkit.getPluginManager().callEvent(BarrageHitEvent(this,particleLocation))
             return
         }
     }
@@ -218,11 +191,6 @@ abstract class Barrage(var startLocation:Location, val barrageUUID:UUID, var bar
             loc.y += relativeLoc.y
             loc.z += relativeLoc.z
         }
-    }
-    // 实际上这个Location是不断更新的
-    // 因此不能这么写 草
-    protected fun addHitLocation(relativeLocation: RelativeLocation){
-
     }
     /**
      * 进行到下一个位置

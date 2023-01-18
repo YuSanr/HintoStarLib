@@ -6,15 +6,16 @@ import cn.HiaXnLib.Particle.ParticleOwner.Owner
 import cn.HiaXnLib.Particle.ParticleOwner.ParticleEntity
 import cn.HiaXnLib.Particle.ParticleOwner.ParticlePlayer
 import cn.HiaXnLib.Particle.ParticleOwner.ParticlePoint
+import cn.HiaXnLib.Particle.RelativeLocation
+import cn.HiaXnLib.Particle.util.ParticleMathUtil
 import cn.HiaXnLib.main
 import org.bukkit.Bukkit
 import org.bukkit.Location
-import org.bukkit.Material
 import org.bukkit.Particle
-import org.bukkit.block.data.type.Bed.Part
 import org.bukkit.entity.Player
 import org.bukkit.util.Vector
-import java.util.UUID
+import java.util.*
+import kotlin.collections.LinkedHashMap
 
 /**
  * 弹幕框架的示例代码
@@ -82,5 +83,27 @@ class SwordTrackBarrage(location:Location,uuid:UUID,barrageOwner:Owner,speed:Dou
         if(nowTick > 40){
             nextLocation()
         }
+    }
+
+    override fun updateAndShowParticle() {
+        val speedDirector = RelativeLocation(speedVector.x,speedVector.y,speedVector.z)
+        val pitch = ParticleMathUtil.toPointPitch(particleGroup.axis,speedDirector)
+        val yaw = ParticleMathUtil.toPointYaw(particleGroup.axis,speedDirector)
+        val mapList = particleGroup.getParticleLocationMap()
+        val relativeList = LinkedList<RelativeLocation>()
+        for (entry in mapList){
+            relativeList.add(entry.key)
+        }
+        ParticleMathUtil.rotationPoint(relativeList,yaw,pitch)
+        val newMap = LinkedHashMap<RelativeLocation,HiaXnParticle>()
+        val keyList = LinkedList<HiaXnParticle>()
+        for (key in mapList.values) {
+            keyList.add(key)
+        }
+        for (i  in 0 until keyList.size){
+            newMap[relativeList[i]] = keyList[i]
+        }
+        // 播放
+        particleGroup.display(newMap)
     }
 }

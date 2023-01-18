@@ -1,6 +1,5 @@
 package cn.HiaXnLib.item
 
-import cn.HiaXnLib.NMS.item.ItemNMS
 import cn.HiaXnLib.NMS.item.itemUtil
 import cn.HiaXnLib.item.utils.ItemStackUtils
 import org.bukkit.enchantments.Enchantment
@@ -35,7 +34,7 @@ open class HiaXnItemStack constructor(val uuid:String,var item:ItemStack,var ite
      * 设置物品的UUID
       */
     init {
-        this.item = getItemNMS().setItemNBT(item,"UUID",uuid)
+        this.item = stackUtils.getItemNMS().setItemNBT(item,"UUID",uuid)
     }
 
     /**
@@ -44,9 +43,9 @@ open class HiaXnItemStack constructor(val uuid:String,var item:ItemStack,var ite
      */
     fun setBreak(b:Boolean){
         if (b== true){
-            item = stackUtils.setItemNBT(item, "Unbreakable", 1)
+            item = stackUtils.getItemNMS().setItemNBT(item, "Unbreakable", 1)
         }else {
-            item = stackUtils.setItemNBT(item, "Unbreakable", 0)
+            item = stackUtils.getItemNMS().setItemNBT(item, "Unbreakable", 0)
         }
         canBreak = b
     }
@@ -75,9 +74,6 @@ open class HiaXnItemStack constructor(val uuid:String,var item:ItemStack,var ite
     fun getItemUtil(): itemUtil {
         return itemUtil()
     }
-    fun getItemNMS(): ItemNMS {
-        return ItemNMS()
-    }
     /**
      * 判定该物品是否注册
      */
@@ -101,7 +97,7 @@ open class HiaXnItemStack constructor(val uuid:String,var item:ItemStack,var ite
      * 如果该物品没有被注册 则添加到注册列表
      */
     fun register(){
-        registerItems[uuid] = this;
+        registerItems[uuid] = this
     }
     /**
      * 从注册的物品中获取该UUID的物品

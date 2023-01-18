@@ -19,15 +19,15 @@ class ParticleTask(private val plugin:Plugin):BukkitRunnable() {
     override fun run() {
         for (pair in activeParticleStyleSet) {
             if (!runningTaskMap.containsKey(pair.owner.getUUID())){
-                runningTaskMap[pair.owner.getUUID()] = ArrayList<ShowParticlePair>()
+                runningTaskMap[pair.owner.getUUID()] = ArrayList()
             }
             val subList = runningTaskMap[pair.owner.getUUID()] ?:continue
             if (!containsPair(pair,pair.owner.getUUID())){
                 subList.add(
-                    ShowParticlePair(Bukkit.getScheduler().runTaskTimerAsynchronously(
+                    ShowParticlePair(Bukkit.getScheduler().runTaskTimer(
                         plugin,{
                             pair.display()
-                        },5,pair.style.getIntervalTime().toLong()),pair))
+                        },0,pair.style.getIntervalTime().toLong()),pair))
             }
         }
         val iterator = runningTaskMap.iterator()

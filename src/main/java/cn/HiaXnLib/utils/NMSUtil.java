@@ -2,7 +2,7 @@ package cn.HiaXnLib.utils;
 
 import org.bukkit.Bukkit;
 
-public class getCodePath {
+public class NMSUtil {
     /**
      * 返回反射包信息
      * @param className 类名

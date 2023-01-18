@@ -31,7 +31,7 @@ object ParticleMathUtil {
      */
     fun getXZCircleLocation(heartLocal:Location,radius:Double,pointNumber: Int):ArrayList<Location>{
         val list = ArrayList<Location>()
-        val addRad = 360.0/pointNumber
+        val addRad = Math.toRadians(360.0/pointNumber)
         var nowRad = 0.0
         for (i in 1 .. pointNumber){
             val rad = Math.toRadians(nowRad)
@@ -230,7 +230,6 @@ object ParticleMathUtil {
         }else{
             val k2 = tan(yaw - PI/2)
             locationOffsetXRotationCircle(loc,yaw)*k2
-//            (tan(PI/2 + yaw)*tan(yaw)*x - tan(PI/2 + yaw)*z)/(tan(yaw) - tan(yaw + PI/2))
         }
     }
     /**
@@ -265,6 +264,7 @@ object ParticleMathUtil {
     }
 
     private fun getPitchRad(loc:RelativeLocation):Double{
+        // 可以用when代替 但是懒得换了:(
         val sp = getYawFromLocation(loc)
         if (loc.y == 0.0 && loc.x == 0.0 && loc.z == 0.0) return 0.0
         val axisX = locationLength(loc,sp)

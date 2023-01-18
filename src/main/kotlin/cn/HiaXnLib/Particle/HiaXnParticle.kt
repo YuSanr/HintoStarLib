@@ -14,6 +14,6 @@ class HiaXnParticle(var config: ParticleConfig){
      */
     class ParticleConfig(var type:Particle,var extra:Double,var count:Int,var offX:Double,var offY:Double,var offZ:Double,var data:Any? = null){
         constructor(type: Particle, extra: Double, count: Int, data: Any? = null):this(type,extra,count,0.0,0.0,0.0,data)
-        constructor(type: Particle):this(type,0.0,10,0.0,0.0,0.0,true)
+        constructor(type: Particle):this(type,0.0,10,0.0,0.0,0.0)
     }
 }

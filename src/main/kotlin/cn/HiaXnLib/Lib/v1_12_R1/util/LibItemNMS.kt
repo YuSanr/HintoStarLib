@@ -1,24 +1,20 @@
-package cn.HiaXnLib.Lib.v1_8_R3.util
+package cn.HiaXnLib.Lib.v1_12_R1.util
 
 import cn.HiaXnLib.API.POJO.HiaXnNBTBaseBuilder
 import cn.HiaXnLib.API.util.ItemNMS
-import net.minecraft.server.v1_8_R3.NBTBase
-import net.minecraft.server.v1_8_R3.NBTTagCompound
-import net.minecraft.server.v1_8_R3.NBTTagDouble
-import net.minecraft.server.v1_8_R3.NBTTagInt
-import net.minecraft.server.v1_8_R3.NBTTagList
-import net.minecraft.server.v1_8_R3.NBTTagLong
+import net.minecraft.server.v1_12_R1.*
 import org.bukkit.Material
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.inventory.ItemStack
 import java.util.*
+import kotlin.collections.HashSet
 
 class LibItemNMS: ItemNMS {
     override fun NMSStackToBukkit(any: Any): ItemStack {
-        if (any !is net.minecraft.server.v1_8_R3.ItemStack){
+        if (any !is net.minecraft.server.v1_12_R1.ItemStack){
             return ItemStack(Material.AIR)
         }
-        any as net.minecraft.server.v1_8_R3.ItemStack
+        any as net.minecraft.server.v1_12_R1.ItemStack
         return CraftItemStack.asBukkitCopy(any)
     }
 
@@ -27,38 +23,39 @@ class LibItemNMS: ItemNMS {
     }
 
     override fun setItemNBT(item: ItemStack, key: String, value: String): ItemStack {
-        val nms = itemStackToNMS(item) as net.minecraft.server.v1_8_R3.ItemStack
-        nms.tag.set(key,NBTTagCompound().getCompound(value))
+        val nms = itemStackToNMS(item) as net.minecraft.server.v1_12_R1.ItemStack
+        nms.tag!!.set(key,NBTTagCompound().getCompound(value))
         return CraftItemStack.asBukkitCopy(nms)
     }
 
     override fun setItemNBT(item: ItemStack, key: String, value: Int): ItemStack {
-        val nms = itemStackToNMS(item) as net.minecraft.server.v1_8_R3.ItemStack
-        nms.tag.set(key,NBTTagInt(value))
+        val nms = itemStackToNMS(item) as net.minecraft.server.v1_12_R1.ItemStack
+        nms.tag!!.set(key, NBTTagInt(value))
         return CraftItemStack.asBukkitCopy(nms)
     }
 
     override fun setItemNBT(item: ItemStack, key: String, value: Double): ItemStack {
-        val nms = itemStackToNMS(item) as net.minecraft.server.v1_8_R3.ItemStack
-        nms.tag.set(key,NBTTagDouble(value))
+        val nms = itemStackToNMS(item) as net.minecraft.server.v1_12_R1.ItemStack
+        nms.tag!!.set(key, NBTTagDouble(value))
         return CraftItemStack.asBukkitCopy(nms)
     }
 
     override fun setItemNBT(item: ItemStack, key: String, value: Long): ItemStack {
-        val nms = itemStackToNMS(item) as net.minecraft.server.v1_8_R3.ItemStack
-        nms.tag.set(key,NBTTagLong(value))
+        val nms = itemStackToNMS(item) as net.minecraft.server.v1_12_R1.ItemStack
+        nms.tag!!.set(key, NBTTagLong(value))
         return CraftItemStack.asBukkitCopy(nms)
     }
 
     override fun setItemNBT(item: ItemStack, key: String, value: HiaXnNBTBaseBuilder<*>): ItemStack {
-        val nms = itemStackToNMS(item) as net.minecraft.server.v1_8_R3.ItemStack
-        nms.tag.set(key,value.toNBTTag() as NBTBase)
+        val nms = itemStackToNMS(item) as net.minecraft.server.v1_12_R1.ItemStack
+        nms.tag!!.set(key,value.toNBTTag() as NBTBase)
         return CraftItemStack.asBukkitCopy(nms)
     }
 
     override fun getItemNBT(item: ItemStack, key: String): Any? {
-        val nms = itemStackToNMS(item) as net.minecraft.server.v1_8_R3.ItemStack
-        val getTag = nms.tag.get(key)
+        val nms = itemStackToNMS(item) as net.minecraft.server.v1_12_R1.ItemStack
+        nms.tag?:return null
+        val getTag = nms.tag!!.get(key)
         return getTag
     }
 
@@ -67,12 +64,13 @@ class LibItemNMS: ItemNMS {
     }
 
     override fun getNBTKeys(item: ItemStack): Set<String> {
-        val nms = itemStackToNMS(item) as net.minecraft.server.v1_8_R3.ItemStack
-        return nms.tag.c()
+        val nms = itemStackToNMS(item) as net.minecraft.server.v1_12_R1.ItemStack
+        nms.tag?:return HashSet<String>()
+        return nms.tag!!.c()
     }
 
     override fun setSkullItem(item: ItemStack, textureValue: String): ItemStack {
-        val nms = itemStackToNMS(item) as net.minecraft.server.v1_8_R3.ItemStack
+        val nms = itemStackToNMS(item) as net.minecraft.server.v1_12_R1.ItemStack
         val tag = nms.tag
         val skullOwner = NBTTagCompound()
         skullOwner.setString("Id",UUID.randomUUID().toString())
@@ -83,7 +81,7 @@ class LibItemNMS: ItemNMS {
         texture.add(value)
         properties.set("textures",texture)
         skullOwner.set("Properties",properties)
-        tag.set("SkullOwner",skullOwner)
+        tag!!.set("SkullOwner",skullOwner)
         nms.tag = tag
         return CraftItemStack.asBukkitCopy(nms)
     }

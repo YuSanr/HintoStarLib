@@ -26,33 +26,47 @@ class LibItemNMS: ItemNMS {
         return CraftItemStack.asNMSCopy(item)
     }
 
+    override fun getItemTag(itemStack: ItemStack): Any {
+        return (itemStackToNMS(itemStack) as net.minecraft.server.v1_8_R3.ItemStack).tag
+    }
+
     override fun setItemNBT(item: ItemStack, key: String, value: String): ItemStack {
         val nms = itemStackToNMS(item) as net.minecraft.server.v1_8_R3.ItemStack
-        nms.tag.set(key,NBTTagCompound().getCompound(value))
+        val tag = nms.tag!!
+        tag.setString(key,value)
+        nms.tag = tag
         return CraftItemStack.asBukkitCopy(nms)
     }
 
     override fun setItemNBT(item: ItemStack, key: String, value: Int): ItemStack {
         val nms = itemStackToNMS(item) as net.minecraft.server.v1_8_R3.ItemStack
-        nms.tag.set(key,NBTTagInt(value))
+        val tag = nms.tag!!
+        tag.setInt(key,value)
+        nms.tag = tag
         return CraftItemStack.asBukkitCopy(nms)
     }
 
     override fun setItemNBT(item: ItemStack, key: String, value: Double): ItemStack {
         val nms = itemStackToNMS(item) as net.minecraft.server.v1_8_R3.ItemStack
-        nms.tag.set(key,NBTTagDouble(value))
+        val tag = nms.tag!!
+        tag.setDouble(key,value)
+        nms.tag = tag
         return CraftItemStack.asBukkitCopy(nms)
     }
 
     override fun setItemNBT(item: ItemStack, key: String, value: Long): ItemStack {
         val nms = itemStackToNMS(item) as net.minecraft.server.v1_8_R3.ItemStack
-        nms.tag.set(key,NBTTagLong(value))
+        val tag = nms.tag!!
+        tag.setLong(key,value)
+        nms.tag = tag
         return CraftItemStack.asBukkitCopy(nms)
     }
 
     override fun setItemNBT(item: ItemStack, key: String, value: HiaXnNBTBaseBuilder<*>): ItemStack {
         val nms = itemStackToNMS(item) as net.minecraft.server.v1_8_R3.ItemStack
-        nms.tag.set(key,value.toNBTTag() as NBTBase)
+        val tag = nms.tag!!
+        tag.set(key,value.toNBTTag() as NBTBase)
+        nms.tag = tag
         return CraftItemStack.asBukkitCopy(nms)
     }
 

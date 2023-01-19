@@ -6,3 +6,4 @@ description: Lib
 
 commands:
   testlib:
+  itemnbt:

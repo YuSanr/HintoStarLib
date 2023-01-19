@@ -131,6 +131,7 @@ object ParticleMathUtil {
         return list
     }
     /**
+     * 将这个点集合的对称轴[一般设置的Yaw pitch是由对称轴对某个点进行差角的计算] 顺时针旋转 yaw pitch角度 [+上了原角]
      * 旋转一个点
      * 把这个点按照2个角度旋转 某个弧度
      * 进行旋转时 通过一个点(对称轴上的点) 获取实际角度
@@ -139,8 +140,9 @@ object ParticleMathUtil {
      * @see toPointPitch 取2点垂直差
      * @param yaw 水平旋转角 弧度
      * @param pitch 垂直旋转角
+     * @param axis 旋转的对称轴
      */
-    fun rotationPoint(locList: List<RelativeLocation>, yaw:Double, pitch:Double):List<RelativeLocation>{
+    fun rotationPoint(locList: List<RelativeLocation>, yaw:Double, pitch:Double,axis:RelativeLocation = RelativeLocation(1.0,0.0,0.0)):List<RelativeLocation>{
         /**
          * 原始XY圆
          * x = cos a *r
@@ -164,7 +166,7 @@ object ParticleMathUtil {
             val offsetZ = locationOffsetZRotationCircle(loc, yaw)
             // 垂直角需要加上原角
             val pitchAdded = pitch + getPitchRad(loc)
-            // 这里需要的是水平旋转YAW弧度之后到垂直轴的距离
+            // 这里需要的是水平旋转YAW弧度之后到垂 -直轴的距离
             // FIXED
             val r = sqrt((loc.x * cos(yaw) - loc.z * sin(yaw) - offsetX).pow(2) + loc.y.pow(2) + (loc.z * cos(yaw) + loc.x * sin(yaw) - offsetZ).pow(2))
 //            val r = loc.length()
@@ -254,9 +256,6 @@ object ParticleMathUtil {
     private fun getYawFromLocation(loc:RelativeLocation):Double{
         var x = loc.x
         var z = loc.z
-        if (x in -0.000000001 .. 0.000000001){
-            x = 0.0
-        }
         if (z in -0.000000001 .. 0.000000001){
             z = 0.0
         }
@@ -267,7 +266,6 @@ object ParticleMathUtil {
         // 可以用when代替 但是懒得换了:(
         val sp = getYawFromLocation(loc)
         if (loc.y == 0.0 && loc.x == 0.0 && loc.z == 0.0) return 0.0
-        val axisX = locationLength(loc,sp)
 //        return atan2(loc.y,axisX)
         val sq = sqrt(loc.x.pow(2)+loc.z.pow(2))
         return if(sp in 0.0 .. PI /2){

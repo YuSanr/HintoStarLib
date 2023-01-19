@@ -14,7 +14,7 @@ interface ItemNMS {
      * Object形式 自行转型
      */
     fun itemStackToNMS(item:ItemStack):Any
-
+    fun getItemTag(itemStack: ItemStack):Any
     /**
      * 设置物品的NBT
      * item 设置的物品

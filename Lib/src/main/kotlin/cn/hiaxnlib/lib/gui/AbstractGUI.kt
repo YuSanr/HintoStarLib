@@ -8,12 +8,11 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 
 abstract class AbstractGUI (val title:String,val size:Int,val owner:Player,var moved:Boolean){
-    val uid = GuiUID.randomUID()
+    val uid = GuiUID.toUID(this::class.java)
     var inventory:Inventory? = null
     private var buttons = Array<AbstractButton>(size){ AirButton() }
     abstract fun onGUIOpen(event:GuiOpenEvent)
     abstract fun onGUIClose(event: GuiCloseEvent)
-    abstract fun clone():AbstractGUI
     fun setButton(button:AbstractButton?,slot:Int){
         if (slot>=size){
             println("Button $button 注册失败 原因: Slot超出容器范围")
@@ -21,8 +20,9 @@ abstract class AbstractGUI (val title:String,val size:Int,val owner:Player,var m
         }
         if (button == null){
             buttons[slot] = AirButton()
+            return
         }
-        buttons[slot] = button!!
+        buttons[slot] = button
     }
     fun getButton(slot:Int):AbstractButton?{
         if (buttons.size-1 < slot || slot<0){
@@ -33,16 +33,14 @@ abstract class AbstractGUI (val title:String,val size:Int,val owner:Player,var m
     private fun updateInventory(){
         if (inventory == null){
             inventory = Bukkit.createInventory(owner,size,"$title $uid")
-            for (i in buttons.indices){
-                inventory!!.contents[i] = buttons[i].item
-            }
-        }else {
-            for (i in buttons.indices){
-                inventory!!.contents[i] = buttons[i].item
-            }
         }
-        if (GUIManner.isHiaXnGui(owner.openInventory)){
-            owner.openInventory.topInventory.contents = inventory!!.contents
+        for (i in buttons.indices){
+            inventory!!.setItem(i,buttons[i].item)
+        }
+        if (GUIManner.isHiaXnGui(owner.openInventory) && GUIManner.getUID(owner.openInventory) == this.uid){
+            for (index in buttons.indices) {
+                owner.openInventory.topInventory.setItem(index,buttons[index].item)
+            }
         }
     }
     fun openGUI(){
@@ -51,7 +49,10 @@ abstract class AbstractGUI (val title:String,val size:Int,val owner:Player,var m
             // 防止GUI冲突 先关闭上一个GUI
             owner.player!!.closeInventory()
             owner.openInventory(inventory!!)
-            Bukkit.getServer().pluginManager.callEvent(GuiOpenEvent(this))
+            val event = GuiOpenEvent(this)
+            Bukkit.getServer().pluginManager.callEvent(event)
+            onGUIOpen(event)
+            GUIManner.playerOpenGUI[owner.uniqueId]  = this
         }else{
             updateInventory()
         }

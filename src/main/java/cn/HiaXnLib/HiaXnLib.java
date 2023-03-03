@@ -3,6 +3,7 @@ package cn.hiaxnlib;
 import cn.hiaxnlib.lib.item.HiaXnItem;
 import cn.hiaxnlib.lib.version.VersionUtil;
 import cn.hiaxnlib.listener.BarrageListener;
+import cn.hiaxnlib.listener.GuiActionListener;
 import cn.hiaxnlib.listener.ItemActionListener;
 import cn.hiaxnlib.lib.manner.BarrageManner;
 import cn.hiaxnlib.lib.manner.GUIManner;
@@ -24,6 +25,8 @@ public final class HiaXnLib extends JavaPlugin {
         getConfig().options().copyDefaults(true);
         saveDefaultConfig();
         Bukkit.getPluginManager().registerEvents(new BarrageListener(),this);
+        Bukkit.getPluginManager().registerEvents(new GuiActionListener(),this);
+        Bukkit.getPluginManager().registerEvents(new ItemActionListener(),this);
         getConfig().options().copyDefaults(true);
         saveDefaultConfig();
         barrageManner = new BarrageManner(getConfig().getInt("BarrageThreadNumber"),this);

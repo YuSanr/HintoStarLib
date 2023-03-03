@@ -4,20 +4,17 @@ import java.util.Random
 
 class GuiUID(val uid:String) {
     companion object{
-        private const val randomChar = "0123456789abcdef"
         /**
          * 32位的随机UID
          */
-        fun randomUID():GuiUID{
-            val rd = Random()
+        fun toUID(cls:Class<out AbstractGUI>):GuiUID{
             val bufferUID = StringBuffer("§")
-            for (i in 0..31){
-                bufferUID.append("${randomChar[rd.nextInt(randomChar.length)]}§")
+            for (c in cls.`package`.toString().hashCode().toString()) {
+                bufferUID.append("$c§")
             }
             bufferUID.deleteCharAt(bufferUID.length-1)
             return GuiUID(bufferUID.toString())
         }
-
     }
 
     override fun equals(other: Any?): Boolean {

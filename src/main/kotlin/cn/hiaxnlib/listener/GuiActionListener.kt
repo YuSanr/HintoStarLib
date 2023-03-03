@@ -17,7 +17,14 @@ class GuiActionListener:Listener {
         val player = event.whoClicked as Player
         if (GUIManner.isHiaXnGui(player.openInventory)) {
             val gui = GUIManner.playerOpenGUI[player.uniqueId]?:return
+            if (!gui.moved){
+                event.isCancelled = true
+            }
+            if (event.clickedInventory != gui.inventory)return
             val button = gui.getButton(event.slot)?:return
+            if (!button.moved){
+                event.isCancelled = true
+            }
             button.onItemClicked(event)
         }
     }
@@ -25,11 +32,11 @@ class GuiActionListener:Listener {
     fun onInventoryOpen(event:InventoryOpenEvent){
         val player = event.player
         if (GUIManner.isHiaXnGui(player.openInventory)){
+            player.openInventory.title
             val gui = GUIManner.playerOpenGUI[player.uniqueId]?:return
             val openEvent = GuiOpenEvent(gui)
             gui.onGUIOpen(openEvent)
             Bukkit.getPluginManager().callEvent(openEvent)
-            GUIManner.playerOpenGUI[player.uniqueId] = gui
         }
     }
     @EventHandler
@@ -41,7 +48,6 @@ class GuiActionListener:Listener {
             gui.onGUIClose(closeEvent)
             GUIManner.playerOpenGUI.remove(player.uniqueId)
             Bukkit.getPluginManager().callEvent(closeEvent)
-
         }
     }
 }

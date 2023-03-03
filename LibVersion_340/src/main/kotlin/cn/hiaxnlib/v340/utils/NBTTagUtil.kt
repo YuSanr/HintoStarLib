@@ -1,4 +1,4 @@
-package cn.hiaxnlib.v498.utils
+package cn.hiaxnlib.v340.utils
 
 import cn.hiaxnlib.lib.item.HiaXnTag
 import cn.hiaxnlib.lib.utils.INBTTagUtil
@@ -15,7 +15,7 @@ class NBTTagUtil:INBTTagUtil {
        val tag =  toNMSNBTTagObject(tag)
         val itemStack = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.ItemStack")
         val nbtTagStringCLS = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.NBTTagString")
-        val craftItemStackCLS = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.CraftItemStack")
+        val craftItemStackCLS = Class.forName("net.minecraft.craftbukkit.${VersionUtil.getVersionString()}.inventory.CraftItemStack")
         val nbtTagCompound = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.NBTTagCompound")
         val nms = craftItemStackCLS.getMethod("asNMSCopy",ItemStack::class.java).invoke(null,item)
         val getNMSTag = itemStack.getMethod("getTag").invoke(nms)
@@ -26,7 +26,7 @@ class NBTTagUtil:INBTTagUtil {
 
     override fun getNBTTag(item: ItemStack, key: String): String? {
         val itemStack = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.ItemStack")
-        val craftItemStackCLS = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.CraftItemStack")
+        val craftItemStackCLS = Class.forName("net.minecraft.craftbukkit.${VersionUtil.getVersionString()}.inventory.CraftItemStack")
         val nbtTagCompound = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.NBTTagCompound")
         val nms = craftItemStackCLS.getMethod("asNMSCopy",ItemStack::class.java).invoke(null,item)
         val getNMSTag = itemStack.getMethod("get").invoke(nms)
@@ -35,7 +35,7 @@ class NBTTagUtil:INBTTagUtil {
 
     override fun removeTag(item: ItemStack, key: String): ItemStack {
         val itemStack = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.ItemStack")
-        val craftItemStackCLS = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.CraftItemStack")
+        val craftItemStackCLS = Class.forName("net.minecraft.craftbukkit.${VersionUtil.getVersionString()}.inventory.CraftItemStack")
         val nbtTagCompound = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.NBTTagCompound")
         val nms = craftItemStackCLS.getMethod("asNMSCopy",ItemStack::class.java).invoke(null,item)
         val getNMSTag = itemStack.getMethod("getTag").invoke(nms)

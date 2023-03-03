@@ -1,4 +1,6 @@
-# HiaXnLib
-HiaXnLib
-寒假制作天灾之下插件版
-用这个LIB
+# HiaXnLib V2
+- 由YuSanr独立自主开发的一个HiaXn专属Lib依赖
+- 是一个工具依赖包
+- 重构大量逆天架构
+  - 但是感觉更加的逆天了草
+  - 多模块支持 多版本

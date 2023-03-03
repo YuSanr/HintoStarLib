@@ -1,6 +1,6 @@
 name: HiaXnLib
 version: '$version'
-main: cn.HiaXnLib.main
+main: cn.hiaxnlib.HiaXnLib
 authors: [ YuSanr ]
 description: Lib
 

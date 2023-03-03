@@ -4,10 +4,11 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '2.0.4'
 }
 
-group 'cn.HiaXnLib'
-version '1.4.1'
+group 'cn.hiaxnlib'
+version '2.0.0-Beta-0.1'
 repositories {
     mavenCentral()
+    mavenLocal()
     maven {name = 'spigotmc-repo'
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
     }
@@ -15,14 +16,21 @@ repositories {
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
 }
+
+var lib = project(":Lib")
+var v754 = project(":LibVersion_754")
 dependencies {
-    compileOnly fileTree(dir: "./lib",includes: ["spigot-1.12.2.jar"])
-    compileOnly fileTree(dir: "./lib",includes: ["*.jar"])
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.0'
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.0'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.0'
+    compileOnly fileTree(dir: "./libuary",includes: ["spigot-1.16.5-R0.1-20210611.090701-17.jar"])
+    compileOnly fileTree(dir: "./libuary",includes: ["PlaceHolderAPI-2.10.9.jar"])
+    compileOnly fileTree(dir: "./libuary",includes: ["ProtocolLib.jar"])
+    implementation lib
+    implementation v754
+//    implementation project(":LibVersion_498")
+    implementation project(":LibVersion_340")
+    implementation 'com.alibaba:fastjson:1.2.83'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10"
 }
+
 def targetJavaVersion = 8
 tasks.withType(JavaCompile).configureEach {
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {

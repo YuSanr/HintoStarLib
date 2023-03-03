@@ -1,1 +1,9 @@
 rootProject.name = 'HiaXnLib'
+
+include ':LibVersion_754',':Lib'
+
+findProject(':LibVersion_754')?.name = 'LibVersion_754'
+findProject(':Lib')?.name = 'Lib'
+include 'LibVersion_498'
+include 'LibVersion_340'
+

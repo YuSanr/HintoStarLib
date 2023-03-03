@@ -1,0 +1,4 @@
+# 处理粒子动画的线程数量
+ ParticleThreadNumber: 2
+ # 处理弹幕移动的线程数量
+ BarrageThreadNumber: 2

@@ -5,6 +5,6 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
 
 class AirButton:AbstractButton(ItemStack(Material.AIR)) {
-    override fun onItemClicked(event: InventoryClickEvent) {
+    override fun onItemClicked(event: InventoryClickEvent,gui:AbstractGUI) {
     }
 }

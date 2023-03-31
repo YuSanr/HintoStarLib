@@ -16,6 +16,9 @@ class GUIManner {
         fun registerGUI(gui:AbstractGUI){
             register.add(gui.uid)
         }
+        fun registerGUI(cls:Class<out AbstractGUI>){
+            register.add(GuiUID.toUID(cls))
+        }
         fun isHiaXnGui(inventoryView: InventoryView):Boolean{
             val uid = getUID(inventoryView)
             return register.contains(uid)
@@ -26,6 +29,8 @@ class GUIManner {
             val uid = split[split.size -1]
             return GuiUID(uid)
         }
+        fun isRegister(uid:GuiUID):Boolean{
+            return register.contains(uid)
+        }
     }
-
 }

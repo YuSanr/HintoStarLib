@@ -37,24 +37,27 @@ abstract class AbstractGUI (val title:String,val size:Int,val owner:Player,var m
         for (i in buttons.indices){
             inventory!!.setItem(i,buttons[i].item)
         }
-        if (GUIManner.isHiaXnGui(owner.openInventory) && GUIManner.getUID(owner.openInventory) == this.uid){
+        if (GUIManner.isHiaXnGui(owner.openInventory) && GUIManner.getUID(owner.openInventory) == this.uid && owner.openInventory.topInventory.size == size){
             for (index in buttons.indices) {
                 owner.openInventory.topInventory.setItem(index,buttons[index].item)
             }
         }
     }
     fun openGUI(){
-        if (inventory == null){
-            updateInventory()
-            // 防止GUI冲突 先关闭上一个GUI
-            owner.player!!.closeInventory()
-            owner.openInventory(inventory!!)
-            val event = GuiOpenEvent(this)
-            Bukkit.getServer().pluginManager.callEvent(event)
-            onGUIOpen(event)
-            GUIManner.playerOpenGUI[owner.uniqueId]  = this
-        }else{
-            updateInventory()
+        if (!GUIManner.isRegister(uid)){
+            GUIManner.registerGUI(uid)
         }
+        if (GUIManner.isHiaXnGui(owner.openInventory) && GUIManner.getUID(owner.openInventory) == this.uid){
+            // 视为更新操作
+            updateInventory()
+            return
+        }
+        updateInventory()
+        owner.player!!.closeInventory()
+        owner.openInventory(inventory!!)
+        GUIManner.playerOpenGUI[owner.uniqueId] = this
+        val event = GuiOpenEvent(this)
+        Bukkit.getServer().pluginManager.callEvent(event)
+        onGUIOpen(event)
     }
 }

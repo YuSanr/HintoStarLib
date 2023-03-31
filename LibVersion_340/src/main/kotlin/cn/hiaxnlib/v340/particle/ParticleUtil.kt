@@ -21,37 +21,44 @@ class ParticleUtil:ParticleUtil {
          * 在这种情况即使使用world.spigot().playEffect()也能修改Particle RedStoneDust的颜色
          * 这里用了包 PacketPlayOutWorldParticle
          */
-        val craftCLS = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.entity.CraftPlayer")
+        val craftCLS = Class.forName("org.bukkit.craftbukkit.${VersionUtil.getVersionString()}.entity.CraftPlayer")
+        val packetCLS = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.Packet")
+        val entityPlayerCLS = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.EntityPlayer")
         if (particle.config.data is DustOptions){
             val dustOptions =  particle.config.data as DustOptions
             val particleEnum = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.EnumParticle")
-            val worldParticleCLS = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.PacketPlayerOutWorldParticles")
+            val enumOBJ = particleEnum.getMethod("valueOf",String::class.java).invoke(null,"REDSTONE")
+            val worldParticleCLS = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.PacketPlayOutWorldParticles")
             val worldParticle = worldParticleCLS.getConstructor(
                 particleEnum,Boolean::class.java,Float::class.java,Float::class.java,Float::class.java,Float::class.java,Float::class.java,Float::class.java,Float::class.java,
                 Int::class.java,IntArray::class.java
-            ).newInstance(particleEnum.getMethod("valueOf",String::class.java).invoke(null,particle.config.type.toString()),particle.config.force,
-                location.x.toFloat(),location.y.toFloat(),location.z.toFloat(),dustOptions.color.red/255f,dustOptions.color.green/255f,dustOptions.color.blue/255f,1f, 0
+            ).newInstance(
+                enumOBJ
+                ,particle.config.force,
+                location.x.toFloat(),location.y.toFloat(),location.z.toFloat(),dustOptions.color.red/255f,dustOptions.color.green/255f,dustOptions.color.blue/255f,1f, 0,IntArray(0)
             )
             for (player in location.world.players) {
-                val field = craftCLS.getField("playerConnection")
-                val playerConnectionObject = field.get(player)
+                val entityPlayer = craftCLS.getMethod("getHandle").invoke(player)
+                val field = entityPlayerCLS.getField("playerConnection")
+                val playerConnectionObject = field.get(entityPlayer)
                 val playerConnectionCls = playerConnectionObject::class.java
-                playerConnectionCls.getMethod("sendPacket",worldParticleCLS).invoke(playerConnectionObject,worldParticle)
+                playerConnectionCls.getMethod("sendPacket",packetCLS).invoke(playerConnectionObject,worldParticle)
             }
         }else{
             val particleEnum = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.EnumParticle")
-            val worldParticleCLS = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.PacketPlayerOutWorldParticles")
+            val worldParticleCLS = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.PacketPlayOutWorldParticles")
             val worldParticle = worldParticleCLS.getConstructor(
                 particleEnum,Boolean::class.java,Float::class.java,Float::class.java,Float::class.java,Float::class.java,Float::class.java,Float::class.java,Float::class.java,
                 Int::class.java,IntArray::class.java
             ).newInstance(particleEnum.getMethod("valueOf",String::class.java).invoke(null,particle.config.type.toString()),particle.config.force,
-                location.x.toFloat(),location.y.toFloat(),location.z.toFloat(),particle.config.offX,particle.config.offY,particle.config.offZ,particle.config.extra, particle.config.count
+                location.x.toFloat(),location.y.toFloat(),location.z.toFloat(),particle.config.offX,particle.config.offY,particle.config.offZ,particle.config.extra, particle.config.count,IntArray(0)
             )
             for (player in location.world.players) {
-                val field = craftCLS.getField("playerConnection")
-                val playerConnectionObject = field.get(player)
+                val entityPlayer = craftCLS.getMethod("getHandle").invoke(player)
+                val field = entityPlayerCLS.getField("playerConnection")
+                val playerConnectionObject = field.get(entityPlayer)
                 val playerConnectionCls = playerConnectionObject::class.java
-                playerConnectionCls.getMethod("sendPacket",worldParticleCLS).invoke(playerConnectionObject,worldParticle)
+                playerConnectionCls.getMethod("sendPacket",packetCLS).invoke(playerConnectionObject,worldParticle)
             }
         }
     }

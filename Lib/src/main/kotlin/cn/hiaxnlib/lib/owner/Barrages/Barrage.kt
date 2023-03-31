@@ -40,9 +40,9 @@ abstract class Barrage(var location:Location, var barrageOwner:Owner, private va
     }
     fun nextLocation(){
         location.apply {
-            x += direction.x
-            y += direction.y
-            z += direction.z
+            x += direction.x * speed
+            y += direction.y * speed
+            z += direction.z * speed
         }
         if (g){
             direction.add(Vector(0.0,-Companion.g,0.0))

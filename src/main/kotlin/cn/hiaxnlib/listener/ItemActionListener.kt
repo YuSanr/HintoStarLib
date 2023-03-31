@@ -22,7 +22,7 @@ class ItemActionListener:Listener {
     }
     @EventHandler (priority = EventPriority.HIGHEST)
     fun onItemClickAtEntity(event:PlayerInteractAtEntityEvent){
-        val item = event.player.itemInHand
+        val item = event.player.itemInHand?:return
         if (HiaXnLib.isHiaXnItem(item)){
             val hiaxnItem = HiaXnLib.toHiaXnItem(item) ?:return
             if (hiaxnItem is ItemClickAtEntityAction){

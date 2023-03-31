@@ -37,4 +37,18 @@ object VersionUtil {
         }
         return 0
     }
+
+    /**
+     *  指定类路径 net.minecraft.server.当前版本.clsPath  （精确到个类）
+     */
+    fun getNMSClass(clsPath:String):Class<*>{
+        return Class.forName("net.minecraft.server.${getVersionString()}.$clsPath")
+    }
+
+    /**
+     * 指定类路径 org.bukkit.craftbukkit.版本.类路径（精确到个类）
+     */
+    fun getCraftClass(clsPath:String):Class<*>{
+        return Class.forName("org.bukkit.craftbukkit.${getVersionString()}.${clsPath}")
+    }
 }

@@ -8,8 +8,9 @@ class GuiUID(val uid:String) {
          * 32位的随机UID
          */
         fun toUID(cls:Class<out AbstractGUI>):GuiUID{
+            val hashCodeSTR = "${cls.`package`.toString().hashCode()}${cls.name.hashCode()}"
             val bufferUID = StringBuffer("§")
-            for (c in cls.`package`.toString().hashCode().toString()) {
+            for (c in hashCodeSTR) {
                 bufferUID.append("$c§")
             }
             bufferUID.deleteCharAt(bufferUID.length-1)

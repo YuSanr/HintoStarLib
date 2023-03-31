@@ -15,6 +15,10 @@ class GuiActionListener:Listener {
     @EventHandler
     fun onInventoryClick(event:InventoryClickEvent){
         val player = event.whoClicked as Player
+//        Bukkit.broadcastMessage("value: ${
+//            GUIManner.isHiaXnGui(player.openInventory)
+//        }, UID:${GUIManner.getUID(player.openInventory).toString().replace("§","&")}" +
+//                "Register:${GUIManner.isRegister(GUIManner.getUID(player.openInventory))}")
         if (GUIManner.isHiaXnGui(player.openInventory)) {
             val gui = GUIManner.playerOpenGUI[player.uniqueId]?:return
             if (!gui.moved){
@@ -25,7 +29,7 @@ class GuiActionListener:Listener {
             if (!button.moved){
                 event.isCancelled = true
             }
-            button.onItemClicked(event)
+            button.onItemClicked(event,gui)
         }
     }
     @EventHandler

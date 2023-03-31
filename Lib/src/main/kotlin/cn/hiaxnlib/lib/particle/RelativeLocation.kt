@@ -5,12 +5,27 @@ import kotlin.math.sqrt
 
 
 // 描述粒子之间的相对位置的类
-class RelativeLocation(var x:Double,var y:Double,var z:Double){
+data class RelativeLocation(var x:Double,var y:Double,var z:Double){
+    operator fun minus(other: RelativeLocation): RelativeLocation {
+        return RelativeLocation(x - other.x, y - other.y, z - other.z)
+    }
+
+    // 添加归一化函数
+    fun normalize(): RelativeLocation {
+        val length = Math.sqrt(x * x + y * y + z * z)
+        return RelativeLocation(x / length, y / length, z / length)
+    }
     override fun toString(): String {
         return "RelativeLocation(x=$x, y=$y, z=$z)"
     }
     fun clone(): RelativeLocation {
         return RelativeLocation(x,y,z)
+    }
+    fun dot(other: RelativeLocation): Double {
+        return x * other.x + y * other.y + z * other.z
+    }
+    fun times(scalar: Double): RelativeLocation {
+        return RelativeLocation(x * scalar, y * scalar, z * scalar)
     }
     fun length() = sqrt(x.pow(2) + y.pow(2) + z.pow(2))
     fun distance(relativeLocation: RelativeLocation) =

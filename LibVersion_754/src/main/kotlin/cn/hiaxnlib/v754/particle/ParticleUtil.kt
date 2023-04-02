@@ -6,6 +6,7 @@ import cn.hiaxnlib.lib.particle.ParticleUtil
 import cn.hiaxnlib.lib.particle.particleData.DustOptions
 import cn.hiaxnlib.lib.version.VersionUtil
 import org.bukkit.Particle
+import org.bukkit.entity.EntityType
 
 //import org.bukkit.Location
 //

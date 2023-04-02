@@ -22,7 +22,6 @@ abstract class HiaXnItem(var item:ItemStack,var uuid:String) {
     }
     fun getNBTTag(key:String): HiaXnTag<String>?{
         val nbtUtil = VersionUtil.getNBTTagUtil()
-
         val value = nbtUtil.getNBTTag(item, key)?:return null
         return HiaXnTag<String>(value)
     }

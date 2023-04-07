@@ -4,6 +4,9 @@ import cn.hiaxnlib.lib.gui.AbstractGUI
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 
+/**
+ * 打开GUI事件
+ */
 class GuiOpenEvent(val gui: AbstractGUI):Event() {
     companion object{
         val handler = HandlerList()

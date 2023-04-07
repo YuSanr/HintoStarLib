@@ -4,6 +4,9 @@ import cn.hiaxnlib.lib.gui.AbstractGUI
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 
+/**
+ * 关闭GUI事件
+ */
 class GuiCloseEvent(val gui:AbstractGUI): Event() {
     companion object{
         val handler = HandlerList()

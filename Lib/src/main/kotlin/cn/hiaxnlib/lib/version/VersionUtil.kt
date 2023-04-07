@@ -1,5 +1,6 @@
 package cn.hiaxnlib.lib.version
 
+import cn.hiaxnlib.lib.entity.EntityUtil
 import cn.hiaxnlib.lib.particle.ParticleUtil
 import cn.hiaxnlib.lib.utils.INBTTagUtil
 import org.bukkit.Bukkit
@@ -12,6 +13,14 @@ object VersionUtil {
     fun getNBTTagUtil():INBTTagUtil{
         val versionParticleUtilCLS = Class.forName("cn.hiaxnlib.v${toVersionNumber()}.utils.NBTTagUtil")
         return versionParticleUtilCLS.newInstance() as INBTTagUtil
+    }
+
+    /**
+     * 获取能够操作实体NBT的工具类
+     */
+    fun getEntityUtil():EntityUtil{
+        val versionEntityUtilCLS = Class.forName("cn.hiaxnlib.v${toVersionNumber()}.entity.EntityUtil")
+        return versionEntityUtilCLS.newInstance() as EntityUtil
     }
     fun getVersionString():String{
         val split =

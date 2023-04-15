@@ -9,6 +9,6 @@ import org.bukkit.event.Listener
 class BarrageListener :Listener {
     @EventHandler
     fun onBarrageHit(event:BarrageHitEvent){
-        HiaXnLib.getBarrageManner().aliveBarrages.remove(event.barrage)
+        HiaXnLib.getBarrageManager().aliveBarrages.remove(event.barrage)
     }
 }

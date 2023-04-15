@@ -10,7 +10,7 @@ repositories {
 }
 //var hiaxn = project(":HiaXnLib")
 dependencies {
-    compileOnly fileTree(dir: "./lib",includes: ["spigot-1.16.5-R0.1-20210611.090701-17.jar"])
+    compileOnly fileTree(dir: "./lib",includes: ["spigot-1.8.8.jar"])
     compileOnly fileTree(dir: "./lib",includes: ["PlaceholderAPI-2.10.9.jar"])
     compileOnly fileTree(dir: "./lib",includes: ["ProtocolLib.jar"])
     implementation "com.alibaba:fastjson:1.2.83"

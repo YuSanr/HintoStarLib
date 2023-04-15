@@ -1,9 +1,11 @@
 package cn.hiaxnlib.lib.version
 
-import cn.hiaxnlib.lib.entity.EntityUtil
+import cn.hiaxnlib.lib.entity.util.EntityUtil
+import cn.hiaxnlib.lib.managers.ArmorStandManager
 import cn.hiaxnlib.lib.particle.ParticleUtil
 import cn.hiaxnlib.lib.utils.INBTTagUtil
 import org.bukkit.Bukkit
+import org.bukkit.plugin.Plugin
 
 object VersionUtil {
     fun getParticleUtil(): ParticleUtil {
@@ -14,11 +16,18 @@ object VersionUtil {
         val versionParticleUtilCLS = Class.forName("cn.hiaxnlib.v${toVersionNumber()}.utils.NBTTagUtil")
         return versionParticleUtilCLS.newInstance() as INBTTagUtil
     }
-
+    fun getHiaXnLibPlugin():Plugin{
+        val hiaxnlibCls = Class.forName("cn.hiaxnlib.HiaXnLib")
+       return  hiaxnlibCls.getMethod("getInstance").invoke(null) as Plugin
+    }
+    fun getArmorStandManager():ArmorStandManager{
+        val hiaxnlibCls = Class.forName("cn.hiaxnlib.HiaXnLib")
+       return hiaxnlibCls.getMethod("getArmorStandManner").invoke(null) as ArmorStandManager
+    }
     /**
      * 获取能够操作实体NBT的工具类
      */
-    fun getEntityUtil():EntityUtil{
+    fun getEntityUtil(): EntityUtil {
         val versionEntityUtilCLS = Class.forName("cn.hiaxnlib.v${toVersionNumber()}.entity.EntityUtil")
         return versionEntityUtilCLS.newInstance() as EntityUtil
     }

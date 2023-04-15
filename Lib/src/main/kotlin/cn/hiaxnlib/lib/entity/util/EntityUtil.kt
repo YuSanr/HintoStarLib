@@ -1,4 +1,4 @@
-package cn.hiaxnlib.lib.entity
+package cn.hiaxnlib.lib.entity.util
 
 import cn.hiaxnlib.lib.item.HiaXnTag
 import org.bukkit.entity.Entity
@@ -15,16 +15,15 @@ interface EntityUtil {
     /**
      * 给实体加载一个NBT 不用重新生成实体
      */
-    fun setNBTTag(entity:Entity, key:String, tag: HiaXnTag<*>): Entity
+    fun <T> setNBTTag(entity:T, key:String, tag: HiaXnTag<*>): T?
 
     /**
      * 获取实体的NBT
      */
-    fun getNBTTag(entity: Entity, key:String):String?
+    fun <T> getNBTTag(entity: T, key:String):String?
 
     /**
      * 删除实体的NBT 不用重新生成实体
      */
-    fun removeTag(entity: Entity, key:String): Entity
-
+    fun <T> removeTag(entity: T, key:String): T?
 }

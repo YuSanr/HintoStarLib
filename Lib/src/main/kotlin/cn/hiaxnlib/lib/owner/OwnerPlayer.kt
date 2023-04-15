@@ -1,6 +1,5 @@
 package cn.hiaxnlib.lib.owner
 
-import cn.hiaxnlib.lib.particle.particleOwner.Owner
 import org.bukkit.Location
 import org.bukkit.entity.Player
 import java.util.UUID
@@ -17,7 +16,7 @@ class OwnerPlayer(var player:Player) : Owner {
     /**
      * @throws NullPointerException 玩家不在线
      */
-    override fun getParticleLocation(): Location {
+    override fun getOwnerLocation(): Location {
         return player.location
     }
 }

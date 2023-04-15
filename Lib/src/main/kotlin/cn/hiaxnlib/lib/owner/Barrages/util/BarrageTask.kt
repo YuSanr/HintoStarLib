@@ -14,6 +14,7 @@ class BarrageTask:BukkitRunnable (),Comparable<BarrageTask>{
         val clone = activeBarrage.clone() as ArrayList<Barrage>
         for (barrage in clone) {
             barrage.displayParticle()
+            barrage.tickAction()
             val hit = barrage.checkBarrageHit()
             if (hit != null){
                 barrage.hitMethod(hit)

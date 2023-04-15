@@ -35,7 +35,7 @@ class NBTTagUtil:INBTTagUtil {
         val nmsItemStackCLS = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.ItemStack")
         val craftItemStackCLS = Class.forName("org.bukkit.craftbukkit.${VersionUtil.getVersionString()}.inventory.CraftItemStack")
         val nbtTagCompoundCLS = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.NBTTagCompound")
-        val nms = craftItemStackCLS.getMethod("asNMSCopy",ItemStack::class.java).invoke(null,item)
+        val nms = craftItemStackCLS.getMethod("asNMSCopy",ItemStack::class.java).invoke(null,item)?:return null
         val getNMSTag = nmsItemStackCLS.getMethod("getTag").invoke(nms)?:return null
         return (nbtTagCompoundCLS.getMethod("getString",String::class.java).invoke(getNMSTag,key)?:return null).toString()
     }

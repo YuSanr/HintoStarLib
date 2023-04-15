@@ -1,4 +1,4 @@
-package cn.hiaxnlib.lib.particle.exception
+package cn.hiaxnlib.lib.exception
 
 class ParticleTypeException: Exception() {
 }

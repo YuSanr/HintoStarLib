@@ -5,14 +5,15 @@ plugins {
 }
 
 group 'cn.hiaxnlib'
-version '2.0.0-DEV-0.8'
+version '2.0.1-DEV-1.0'
 repositories {
     mavenCentral()
-    mavenLocal()
-    maven {name = 'spigotmc-repo'
+    maven {
+        name = 'spigotmc-repo'
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
     }
-    maven {name = 'sonatype'
+    maven {
+        name = 'sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
 }
@@ -27,7 +28,6 @@ dependencies {
     implementation v754
 //    implementation project(":LibVersion_498")
     implementation project(":LibVersion_340")
-    implementation 'com.alibaba:fastjson:1.2.83'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10"
 }
 

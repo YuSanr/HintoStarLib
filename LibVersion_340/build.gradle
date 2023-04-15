@@ -12,7 +12,6 @@ repositories {
 dependencies {
     compileOnly fileTree(dir:"./libs",include:["spigot-1.8.8.jar","PlaceholderAPI-2.10.9.jar","ProtocolLib.jar"])
     implementation project(":Lib")
-    implementation 'com.alibaba:fastjson:1.2.83'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10"
 }
 compileKotlin {

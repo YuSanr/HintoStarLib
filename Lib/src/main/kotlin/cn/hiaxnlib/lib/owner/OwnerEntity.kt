@@ -1,6 +1,5 @@
 package cn.hiaxnlib.lib.owner
 
-import cn.hiaxnlib.lib.particle.particleOwner.Owner
 import org.bukkit.Location
 import org.bukkit.entity.Entity
 import java.lang.NullPointerException
@@ -18,7 +17,7 @@ class OwnerEntity(val entity:Entity): Owner {
     /**
      * @throws NullPointerException Entity not Valid
      */
-    override fun getParticleLocation(): Location {
+    override fun getOwnerLocation(): Location {
 
         return entity.location
     }

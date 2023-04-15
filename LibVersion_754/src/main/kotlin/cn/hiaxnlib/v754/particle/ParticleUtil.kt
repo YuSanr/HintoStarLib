@@ -1,12 +1,11 @@
 package cn.hiaxnlib.v754.particle
 
-import cn.hiaxnlib.particle.HiaXnParticle
+import cn.hiaxnlib.lib.particle.particle.HiaXnParticle
 import org.bukkit.Location
 import cn.hiaxnlib.lib.particle.ParticleUtil
 import cn.hiaxnlib.lib.particle.particleData.DustOptions
 import cn.hiaxnlib.lib.version.VersionUtil
 import org.bukkit.Particle
-import org.bukkit.entity.EntityType
 
 //import org.bukkit.Location
 //
@@ -32,7 +31,6 @@ class ParticleUtill :ParticleUtil{
 //            }
 
             // 非导包方法
-
             val craftParticleCLS = VersionUtil.getCraftClass("CraftParticle")
             val packetParticleCLS = VersionUtil.getNMSClass("PacketPlayOutWorldParticles")
             val packet = if (particle.config.data is DustOptions){

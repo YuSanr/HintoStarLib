@@ -2,7 +2,7 @@ package cn.hiaxnlib.listener
 
 import cn.hiaxnlib.lib.event.GuiCloseEvent
 import cn.hiaxnlib.lib.event.GuiOpenEvent
-import cn.hiaxnlib.lib.manner.GUIManner
+import cn.hiaxnlib.lib.managers.GUIManager
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -19,8 +19,8 @@ class GuiActionListener:Listener {
 //            GUIManner.isHiaXnGui(player.openInventory)
 //        }, UID:${GUIManner.getUID(player.openInventory).toString().replace("§","&")}" +
 //                "Register:${GUIManner.isRegister(GUIManner.getUID(player.openInventory))}")
-        if (GUIManner.isHiaXnGui(player.openInventory)) {
-            val gui = GUIManner.playerOpenGUI[player.uniqueId]?:return
+        if (GUIManager.isHiaXnGui(player.openInventory)) {
+            val gui = GUIManager.playerOpenGUI[player.uniqueId]?:return
             if (!gui.moved){
                 event.isCancelled = true
             }
@@ -35,9 +35,9 @@ class GuiActionListener:Listener {
     @EventHandler
     fun onInventoryOpen(event:InventoryOpenEvent){
         val player = event.player
-        if (GUIManner.isHiaXnGui(player.openInventory)){
+        if (GUIManager.isHiaXnGui(player.openInventory)){
             player.openInventory.title
-            val gui = GUIManner.playerOpenGUI[player.uniqueId]?:return
+            val gui = GUIManager.playerOpenGUI[player.uniqueId]?:return
             val openEvent = GuiOpenEvent(gui)
             gui.onGUIOpen(openEvent)
             Bukkit.getPluginManager().callEvent(openEvent)
@@ -46,11 +46,11 @@ class GuiActionListener:Listener {
     @EventHandler
     fun onInventoryClose(event:InventoryCloseEvent){
         val player = event.player
-        if (GUIManner.isHiaXnGui(player.openInventory)){
-            val gui = GUIManner.playerOpenGUI[player.uniqueId]?:return
+        if (GUIManager.isHiaXnGui(player.openInventory)){
+            val gui = GUIManager.playerOpenGUI[player.uniqueId]?:return
             val closeEvent = GuiCloseEvent(gui)
             gui.onGUIClose(closeEvent)
-            GUIManner.playerOpenGUI.remove(player.uniqueId)
+            GUIManager.playerOpenGUI.remove(player.uniqueId)
             Bukkit.getPluginManager().callEvent(closeEvent)
         }
     }

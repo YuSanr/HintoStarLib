@@ -1,6 +1,6 @@
 package cn.hiaxnlib.event
 
-import cn.hiaxnlib.lib.particle.particleOwner.Owner
+import cn.hiaxnlib.lib.owner.Owner
 import cn.hiaxnlib.lib.owner.Barrages.Barrage
 import org.bukkit.event.Event
 import org.bukkit.event.HandlerList

@@ -5,7 +5,7 @@ import org.bukkit.Location
 import org.bukkit.entity.Player
 import org.bukkit.util.Vector
 import kotlin.math.*
-
+@Deprecated("cn.hiaxnlib.lib.utils.MathUtil 已经完全代替这个类了")
 object ParticleMathUtil {
     /**
      * 通过2个坐标制作向量来表达直线

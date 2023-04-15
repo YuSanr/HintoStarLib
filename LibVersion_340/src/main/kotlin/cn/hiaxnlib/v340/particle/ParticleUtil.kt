@@ -3,7 +3,7 @@ package cn.hiaxnlib.v340.particle
 import cn.hiaxnlib.lib.particle.ParticleUtil
 import cn.hiaxnlib.lib.particle.particleData.DustOptions
 import cn.hiaxnlib.lib.version.VersionUtil
-import cn.hiaxnlib.particle.HiaXnParticle
+import cn.hiaxnlib.lib.particle.particle.HiaXnParticle
 import org.bukkit.Location
 
 class ParticleUtil:ParticleUtil {
@@ -35,7 +35,9 @@ class ParticleUtil:ParticleUtil {
             ).newInstance(
                 enumOBJ
                 ,particle.config.force,
-                location.x.toFloat(),location.y.toFloat(),location.z.toFloat(),dustOptions.color.red/255f,dustOptions.color.green/255f,dustOptions.color.blue/255f,1f, 0,IntArray(0)
+                location.x.toFloat(),location.y.toFloat(),location.z.toFloat(),
+                dustOptions.color.red/255f,dustOptions.color.green/255f,dustOptions.color.blue/255f,1f, 0,
+                IntArray(0)
             )
             for (player in location.world.players) {
                 val entityPlayer = craftCLS.getMethod("getHandle").invoke(player)
@@ -47,11 +49,16 @@ class ParticleUtil:ParticleUtil {
         }else{
             val particleEnum = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.EnumParticle")
             val worldParticleCLS = Class.forName("net.minecraft.server.${VersionUtil.getVersionString()}.PacketPlayOutWorldParticles")
+            val enumOBJ = particleEnum.getMethod("valueOf",String::class.java).invoke(null,particle.config.type.toString())
             val worldParticle = worldParticleCLS.getConstructor(
                 particleEnum,Boolean::class.java,Float::class.java,Float::class.java,Float::class.java,Float::class.java,Float::class.java,Float::class.java,Float::class.java,
                 Int::class.java,IntArray::class.java
-            ).newInstance(particleEnum.getMethod("valueOf",String::class.java).invoke(null,particle.config.type.toString()),particle.config.force,
-                location.x.toFloat(),location.y.toFloat(),location.z.toFloat(),particle.config.offX,particle.config.offY,particle.config.offZ,particle.config.extra, particle.config.count,IntArray(0)
+            ).newInstance(
+                enumOBJ,
+                particle.config.force,
+                location.x.toFloat(),location.y.toFloat(),location.z.toFloat()
+                ,particle.config.offX.toFloat(),particle.config.offY.toFloat(),particle.config.offZ.toFloat(),
+                particle.config.extra.toFloat(), particle.config.count,IntArray(0)
             )
             for (player in location.world.players) {
                 val entityPlayer = craftCLS.getMethod("getHandle").invoke(player)

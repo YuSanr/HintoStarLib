@@ -1,27 +1,31 @@
 package cn.hiaxnlib.lib.owner.Barrages
 
-import cn.hiaxnlib.lib.particle.particleOwner.Owner
+import cn.hiaxnlib.lib.owner.Owner
 import cn.hiaxnlib.particle.HiaXnParticleStyle
 import org.bukkit.Location
 import org.bukkit.util.Vector
 import java.util.UUID
 
-abstract class Barrage(var location:Location, var barrageOwner:Owner, private var speed:Double, private var direction:Vector, var style:HiaXnParticleStyle, var g:Boolean, val uuid:UUID = UUID.randomUUID()):Owner {
+abstract class Barrage(var location:Location, var barrageOwner: Owner, private var speed:Double, private var direction:Vector, var style:HiaXnParticleStyle, var g:Boolean, val uuid:UUID = UUID.randomUUID()):
+    Owner {
     companion object{
         /**
          *重力加速度 /tick
          */
         const val g = 0.3
     }
+    init {
+        direction = direction.multiply(1/direction.length())
+    }
     override fun getOwner(): Owner {
         return this
     }
 
-    override fun getParticleLocation(): Location {
+    override fun getOwnerLocation(): Location {
         return location
     }
     fun setDirection(vector: Vector){
-        direction = vector.multiply(speed/vector.length())
+        direction = vector.multiply(1/vector.length())
     }
     fun getDirection():Vector{
         return direction
@@ -39,10 +43,10 @@ abstract class Barrage(var location:Location, var barrageOwner:Owner, private va
         return speed
     }
     fun nextLocation(){
-        location.apply {
-            x += direction.x * speed
-            y += direction.y * speed
-            z += direction.z * speed
+        location.also {
+            it.x += direction.x * speed
+            it.y += direction.y * speed
+            it.z += direction.z * speed
         }
         if (g){
             direction.add(Vector(0.0,-Companion.g,0.0))
@@ -58,16 +62,21 @@ abstract class Barrage(var location:Location, var barrageOwner:Owner, private va
     fun displayParticle(){
         style.display(location)
     }
+
+    /**
+     * tick执行的活动
+     */
+    abstract fun tickAction()
     /**
      * 检测弹幕是否击中
      * 未击中任何请返回Null
      */
-    abstract fun checkBarrageHit():Owner?
+    abstract fun checkBarrageHit(): Owner?
 
     /**
      * 击中做出的需要处理的事件
      */
-    abstract fun hitMethod(owner:Owner)
+    abstract fun hitMethod(owner: Owner)
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

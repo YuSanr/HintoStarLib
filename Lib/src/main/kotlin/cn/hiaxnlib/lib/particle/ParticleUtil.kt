@@ -1,6 +1,6 @@
 package cn.hiaxnlib.lib.particle
 
-import cn.hiaxnlib.particle.HiaXnParticle
+import cn.hiaxnlib.lib.particle.particle.HiaXnParticle
 import org.bukkit.Location
 
 interface ParticleUtil {

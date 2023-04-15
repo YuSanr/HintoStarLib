@@ -2,7 +2,7 @@ package cn.hiaxnlib.lib.gui
 
 import cn.hiaxnlib.lib.event.GuiCloseEvent
 import cn.hiaxnlib.lib.event.GuiOpenEvent
-import cn.hiaxnlib.lib.manner.GUIManner
+import cn.hiaxnlib.lib.managers.GUIManager
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
@@ -37,17 +37,17 @@ abstract class AbstractGUI (val title:String,val size:Int,val owner:Player,var m
         for (i in buttons.indices){
             inventory!!.setItem(i,buttons[i].item)
         }
-        if (GUIManner.isHiaXnGui(owner.openInventory) && GUIManner.getUID(owner.openInventory) == this.uid && owner.openInventory.topInventory.size == size){
+        if (GUIManager.isHiaXnGui(owner.openInventory) && GUIManager.getUID(owner.openInventory) == this.uid && owner.openInventory.topInventory.size == size){
             for (index in buttons.indices) {
                 owner.openInventory.topInventory.setItem(index,buttons[index].item)
             }
         }
     }
     fun openGUI(){
-        if (!GUIManner.isRegister(uid)){
-            GUIManner.registerGUI(uid)
+        if (!GUIManager.isRegister(uid)){
+            GUIManager.registerGUI(uid)
         }
-        if (GUIManner.isHiaXnGui(owner.openInventory) && GUIManner.getUID(owner.openInventory) == this.uid){
+        if (GUIManager.isHiaXnGui(owner.openInventory) && GUIManager.getUID(owner.openInventory) == this.uid){
             // 视为更新操作
             updateInventory()
             return
@@ -55,7 +55,7 @@ abstract class AbstractGUI (val title:String,val size:Int,val owner:Player,var m
         updateInventory()
         owner.player!!.closeInventory()
         owner.openInventory(inventory!!)
-        GUIManner.playerOpenGUI[owner.uniqueId] = this
+        GUIManager.playerOpenGUI[owner.uniqueId] = this
         val event = GuiOpenEvent(this)
         Bukkit.getServer().pluginManager.callEvent(event)
         onGUIOpen(event)

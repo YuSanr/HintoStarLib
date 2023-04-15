@@ -1,10 +1,9 @@
 package cn.hiaxnlib.lib.owner
 
-import cn.hiaxnlib.lib.particle.particleOwner.Owner
 import org.bukkit.Location
 import java.util.UUID
 
-class OwnerPoint(var location:Location, val pointUUID:UUID):Owner {
+class OwnerPoint(var location:Location, val pointUUID:UUID): Owner {
     override fun getOwner(): Owner {
         return this
     }
@@ -13,7 +12,7 @@ class OwnerPoint(var location:Location, val pointUUID:UUID):Owner {
         return pointUUID
     }
 
-    override fun getParticleLocation(): Location {
+    override fun getOwnerLocation(): Location {
         return location
     }
 }

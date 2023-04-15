@@ -1,11 +1,33 @@
 package cn.hiaxnlib.particle
 
+import org.bukkit.Location
+import org.bukkit.util.Vector
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 
-// 描述粒子之间的相对位置的类
+/**
+ * 描述粒子之间相对位置的类
+ * 相对位置 又名向量
+ * 草
+ */
 data class RelativeLocation(var x:Double,var y:Double,var z:Double){
+    companion object{
+
+        fun toRelativeLocation(start:Location,end:Location):RelativeLocation{
+            return RelativeLocation(end.x - start.x, end.y-start.y, end.z-start.z)
+        }
+        fun toRelativeLocation(vector: Vector):RelativeLocation{
+            return RelativeLocation(vector.x,vector.y,vector.z)
+        }
+        fun toVector(relativeLocation: RelativeLocation):Vector{
+            return Vector(relativeLocation.x,relativeLocation.y,relativeLocation.z)
+        }
+    }
+    constructor():this(0.0,0.0,0.0)
+    constructor(x:Int,y:Int,z:Int):this(x.toDouble(),y.toDouble(),z.toDouble())
+    constructor(x:Float,y:Float,z:Float):this(x.toDouble(),y.toDouble(),z.toDouble())
+    constructor(x:Long,y:Long,z:Long):this(x.toDouble(),y.toDouble(),z.toDouble())
     operator fun minus(other: RelativeLocation): RelativeLocation {
         return RelativeLocation(x - other.x, y - other.y, z - other.z)
     }
@@ -21,11 +43,31 @@ data class RelativeLocation(var x:Double,var y:Double,var z:Double){
     fun clone(): RelativeLocation {
         return RelativeLocation(x,y,z)
     }
+
+    /**
+     * 向量点乘
+     */
     fun dot(other: RelativeLocation): Double {
         return x * other.x + y * other.y + z * other.z
     }
-    fun times(scalar: Double): RelativeLocation {
+    operator fun times(scalar: Double): RelativeLocation {
         return RelativeLocation(x * scalar, y * scalar, z * scalar)
+    }
+    operator fun plus(other: RelativeLocation): RelativeLocation {
+        return RelativeLocation(x + other.x, y + other.y, z + other.z)
+    }
+    fun toVector():Vector{
+        return Vector(x,y,z)
+    }
+    /**
+     * 向量叉乘
+     */
+    fun cross(vector:RelativeLocation):RelativeLocation{
+        return RelativeLocation(
+            y*vector.z-z*vector.y,
+            z*vector.x - x*vector.z,
+            x*vector.y - y*vector.x
+        )
     }
     fun length() = sqrt(x.pow(2) + y.pow(2) + z.pow(2))
     fun distance(relativeLocation: RelativeLocation) =

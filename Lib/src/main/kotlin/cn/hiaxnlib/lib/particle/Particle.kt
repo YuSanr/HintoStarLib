@@ -1,7 +1,6 @@
 package cn.hiaxnlib.lib.particle
 
 import cn.hiaxnlib.lib.particle.particleData.DustOptions
-import org.bukkit.block.data.BlockData
 import org.bukkit.inventory.ItemStack
 import org.bukkit.material.MaterialData
 
